@@ -357,47 +357,141 @@
         </div>
     </nav>
 
-    <!-- main content: audiobook collection (exactly as provided, now as a full page) -->
-    <div class="main-content">
-        <div class="component-preview">
-            <h3>
-                <i class="fas fa-headphones"></i> Further Interest (Audiobook Collection)
-            </h3>
-            <div class="book-grid">
-                <!-- audiobook 1 -->
-                <div class="book-item">
-                    <span class="icon">🎧</span>
-                    <span class="audio-badge"><i class="fas fa-play-circle"></i> audiobook</span>
-                    <div class="book-title">Lean Startup Methodology</div>
-                    <a href="#" class="btn-read"><i class="fas fa-headphones"></i> Listen</a>
+    <!-- main content: video collection (now with proper video cards) -->
+<div class="main-content">
+    <div class="component-preview">
+        <h3>
+            <i class="fas fa-video" style="color: #ffdf9e;"></i> Further Interest (Video Lectures)
+        </h3>
+        <div class="book-grid">
+            <!-- video card 1 -->
+            <div class="book-item video-card">
+                <div class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/tVX9npuCO7Y/0.jpg" alt="Lean Startup video thumbnail">
+                    <span class="play-icon"><i class="fas fa-play-circle"></i></span>
                 </div>
-                <!-- audiobook 2 -->
-                <div class="book-item">
-                    <span class="icon">🎧</span>
-                    <span class="audio-badge"><i class="fas fa-play-circle"></i> audiobook</span>
-                    <div class="book-title">Advanced Macroeconomics</div>
-                    <a href="#" class="btn-read"><i class="fas fa-headphones"></i> Listen</a>
-                </div>
-                <!-- audiobook 3 -->
-                <div class="book-item">
-                    <span class="icon">🎧</span>
-                    <span class="audio-badge"><i class="fas fa-play-circle"></i> audiobook</span>
-                    <div class="book-title">Corporate Governance 101</div>
-                    <a href="#" class="btn-read"><i class="fas fa-headphones"></i> Listen</a>
-                </div>
-                <!-- bonus 4th item -->
-                <div class="book-item">
-                    <span class="icon">🎧</span>
-                    <span class="audio-badge"><i class="fas fa-play-circle"></i> audiobook</span>
-                    <div class="book-title">Behavioral Economics</div>
-                    <a href="#" class="btn-read"><i class="fas fa-headphones"></i> Listen</a>
-                </div>
+                <span class="video-badge"><i class="fas fa-clock"></i> 28:14</span>
+                <div class="book-title">Lean Startup Methodology</div>
+                <a href="#" class="btn-read" target="_blank" rel="noopener"><i class="fas fa-play"></i> Watch Lecture</a>
             </div>
-            <p style="text-align: right; margin-top: 2.5rem; color: rgba(255,255,240,0.5); font-size: 0.9rem; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 1.2rem;">
-                <i class="fas fa-microphone-alt" style="margin-right: 6px;"></i> 4 new audiobooks added · narrated versions
-            </p>
+            <!-- video card 2 -->
+            <div class="book-item video-card">
+                <div class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/d5Y6fLkz_l0/0.jpg" alt="Advanced Macroeconomics thumbnail">
+                    <span class="play-icon"><i class="fas fa-play-circle"></i></span>
+                </div>
+                <span class="video-badge"><i class="fas fa-clock"></i> 42:07</span>
+                <div class="book-title">Advanced Macroeconomics</div>
+                <a href="#" class="btn-read" target="_blank" rel="noopener"><i class="fas fa-play"></i> Watch Lecture</a>
+            </div>
+            <!-- video card 3 -->
+            <div class="book-item video-card">
+                <div class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/9kuzRGS2VKY/0.jpg" alt="Corporate Governance thumbnail">
+                    <span class="play-icon"><i class="fas fa-play-circle"></i></span>
+                </div>
+                <span class="video-badge"><i class="fas fa-clock"></i> 35:22</span>
+                <div class="book-title">Corporate Governance 101</div>
+                <a href="#" class="btn-read" target="_blank" rel="noopener"><i class="fas fa-play"></i> Watch Lecture</a>
+            </div>
+            <!-- video card 4 -->
+            <div class="book-item video-card">
+                <div class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/8ssSMholdt8/0.jpg" alt="Behavioral Economics thumbnail">
+                    <span class="play-icon"><i class="fas fa-play-circle"></i></span>
+                </div>
+                <span class="video-badge"><i class="fas fa-clock"></i> 51:33</span>
+                <div class="book-title">Behavioral Economics</div>
+                <a href="https://www.youtube.com/watch?v=46zF8Mt5mx0" class="btn-read" target="_blank" rel="noopener"><i class="fas fa-play"></i> Watch Lecture</a>
+            </div>
         </div>
+        <p style="text-align: right; margin-top: 2.5rem; color: rgba(255,255,240,0.5); font-size: 0.9rem; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 1.2rem;">
+            <i class="fas fa-video" style="margin-right: 6px;"></i> 4 new video lectures · updated weekly
+        </p>
     </div>
+</div>
+
+<!-- ===== ADD THIS CSS TO YOUR STYLE SECTION ===== -->
+<style>
+    /* video card specific styling - add to your existing CSS */
+    .video-card {
+        padding: 1.2rem 1.2rem 1.8rem 1.2rem !important;
+    }
+    
+    .video-thumbnail {
+        position: relative;
+        width: 100%;
+        border-radius: 24px;
+        overflow: hidden;
+        margin-bottom: 0.8rem;
+        aspect-ratio: 16 / 9;
+        border: 1px solid rgba(255,255,255,0.2);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+    
+    .video-thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.3s ease;
+    }
+    
+    .video-card:hover .video-thumbnail img {
+        transform: scale(1.05);
+    }
+    
+    .play-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3rem;
+        color: rgba(255, 255, 255, 0.9);
+        text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        transition: all 0.2s;
+        opacity: 0.9;
+        z-index: 2;
+    }
+    
+    .video-card:hover .play-icon {
+        color: #f2a900;
+        transform: translate(-50%, -50%) scale(1.1);
+        text-shadow: 0 0 20px rgba(242, 169, 0, 0.8);
+    }
+    
+    .video-badge {
+        background: rgba(242, 169, 0, 0.3);
+        border: 1px solid #f2a900;
+        border-radius: 30px;
+        padding: 0.2rem 0.8rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+        color: #ffefc0;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 0.2rem;
+        margin-bottom: 0.3rem;
+        backdrop-filter: blur(4px);
+    }
+    
+    /* ensure the book-title works with video cards */
+    .video-card .book-title {
+        margin: 0.8rem 0 1.2rem 0;
+        min-height: auto;
+        font-size: 1.1rem;
+    }
+    
+    /* responsive adjustment */
+    @media (max-width: 600px) {
+        .play-icon {
+            font-size: 2.5rem;
+        }
+    }
+</style>
 
     <!-- footer (matches all Nexus pages) -->
     <footer>
