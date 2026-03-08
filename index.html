@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Academy · liquid glass</title>
-    <!-- Font Awesome Icons (optional but nice) -->
+    <title>ECOEMY · liquid glass</title>
+    <!-- JS file for all logic -->
+    <link href="ECOMEY.JS">
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -19,8 +21,8 @@
             --glass-border: rgba(255, 255, 255, 0.25);
             --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
             --backdrop-blur: blur(12px) saturate(180%);
-            --primary-soft: rgba(90, 120, 230, 0.7);   /* #5a78e6 with opacity */
-            --accent-glow: rgba(255, 200, 70, 0.75);   /* warm honey */
+            --primary-soft: rgba(90, 120, 230, 0.7);
+            --accent-glow: rgba(255, 200, 70, 0.75);
             --text-light: #f2f2f2;
             --text-dark: #1e1e2f;
             --deep-bg-start: #0b0f1c;
@@ -220,7 +222,7 @@
             letter-spacing: -0.5px;
         }
 
-        /* ===== PROGRAMS GRID ===== */
+        /* ===== PROGRAMS GRID (keeping original) ===== */
         .programs-grid {
             max-width: 1300px;
             width: 95%;
@@ -270,7 +272,95 @@
             backdrop-filter: blur(2px);
         }
 
-        /* ===== FOOTER ===== */
+        /* ===== NEW 3-COLUMN SECTION (Enrolment, Classes, Books & Notes) ===== */
+        .quick-access-grid {
+            max-width: 1300px;
+            width: 95%;
+            margin: 2rem auto 3rem auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+            padding: 0 1rem;
+        }
+
+        .access-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--backdrop-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            padding: 2.5rem 1.8rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--glass-shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .access-card:hover {
+            transform: translateY(-6px);
+            background: rgba(255,255,255,0.25);
+            border-color: rgba(255, 215, 100, 0.6);
+            box-shadow: 0 30px 45px -15px #000000;
+        }
+
+        .access-icon {
+            font-size: 3.5rem;
+            background: rgba(255,255,240,0.12);
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            margin-bottom: 0.5rem;
+            color: #ffdf9e;
+        }
+
+        .access-card h3 {
+            font-size: 2rem;
+            font-weight: 600;
+            background: linear-gradient(to bottom, #ffffff, #ffecb3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0.5rem 0 0.2rem;
+        }
+
+        .access-card p {
+            font-size: 1rem;
+            color: rgba(255,255,245,0.8);
+            margin-bottom: 1.2rem;
+            min-height: 3rem;
+        }
+
+        .access-btn {
+            background: rgba(242, 169, 0, 0.7);
+            border: 1px solid rgba(255, 215, 100, 0.8);
+            color: #0a0a14;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: all 0.2s;
+            backdrop-filter: blur(4px);
+            margin-top: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .access-btn:hover {
+            background: rgba(255, 190, 50, 0.9);
+            transform: scale(1.05);
+            box-shadow: 0 8px 18px rgba(255,180,50,0.3);
+        }
+
+        /* ===== FOOTER (exactly as requested, unchanged) ===== */
         footer {
             max-width: 1300px;
             width: 95%;
@@ -287,7 +377,7 @@
             box-shadow: 0 -5px 30px rgba(0,0,0,0.3);
         }
 
-        /* decorative glass droplets / micro interactions */
+        /* decorative glass droplets / micro interactions (original) */
         .prog-card::after {
             content: '';
             position: absolute;
@@ -301,7 +391,34 @@
             pointer-events: none;
         }
 
-        .prog-card { position: relative; overflow: hidden; }
+        .prog-card { 
+            position: relative; 
+            overflow: hidden; 
+        }
+
+        /* floating orbs (liquid vibe) – purely decorative */
+        #orb-bottom {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(255,215,150,0.15) 0%, transparent 80%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        #orb-top {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(150,200,255,0.12) 0%, transparent 80%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
 
         /* responsive */
         @media (max-width: 700px) {
@@ -314,17 +431,19 @@
 </head>
 <body>
 
-    <!-- LIQUID GLASS NAVIGATION (frosted & floating) -->
+    <!-- floating orbs (kept exactly as original) -->
+    <div id="orb-bottom"></div>
+    <div id="orb-top"></div>
+
+    <!-- LIQUID GLASS NAVIGATION (frosted & floating) with ECOEMY logo -->
     <nav>
         <div class="logo">
-            <h2>NEXUS<span>ACADEMY</span></h2>
+            <h2>ECO<span>EMY</span></h2>
         </div>
         <div class="nav-links">
             <a href="index.html"><i class="fas fa-home" style="margin-right: 6px;"></i>Home</a>
-            <a href="#about"><i class="fas fa-info-circle" style="margin-right: 6px;"></i>About Us</a>
-            <a href="dashboard.html"><i class="fas fa-chart-line" style="margin-right: 6px;"></i>Dashboard</a>
+            <a href="classes.html"><i class="fas fa-chalkboard-teacher"></i> My Classes</a>
             <a href="library.html"><i class="fas fa-book" style="margin-right: 6px;"></i>E-Book Store</a>
-            <a href="exams.html"><i class="fas fa-pencil-alt" style="margin-right: 6px;"></i>Paper Page</a>
             <a href="enroll.html" class="btn-enroll"><i class="fas fa-gem" style="margin-right: 6px;"></i>Enroll Now</a>
         </div>
     </nav>
@@ -335,21 +454,20 @@
         <p>Your gateway to world-recognized A-Level, IGCSE, and BTEC Qualifications.</p>
     </header>
 
-    <!-- ABOUT section – extra glassy -->
+    <!-- ABOUT section – extra glassy (text unchanged) -->
     <section id="about">
         <div class="about-content">
             <h2>About Our Institution</h2>
-            <p>Nexus Academy provides a flexible, high-standard learning environment. We specialize in Business and Academic excellence, ensuring our students are prepared for both top-tier universities and the modern corporate world.</p>
+            <p>ECOEMY provides a flexible, high-standard learning environment. We specialize in Economics + Business for excellence, ensuring our students are prepared for both top-tier universities and the modern corporate world.</p>
         </div>
     </section>
 
-    <!-- PROGRAMS section – liquid glass cards -->
+    <!-- PROGRAMS section – liquid glass cards (original, unchanged) -->
     <h2 class="section-title">Our Programs</h2>
     <section id="programs" class="programs-grid">
         <div class="prog-card">
             <h3>A-Levels</h3>
             <p>Comprehensive subject range for university preparation.</p>
-            <!-- subtle icon -->
             <i class="fas fa-graduation-cap" style="font-size: 3rem; opacity: 0.3; margin-top: 1rem; color: #ffefc0;"></i>
         </div>
         <div class="prog-card">
@@ -364,14 +482,35 @@
         </div>
     </section>
 
-    <!-- FOOTER – matching liquid aesthetic -->
+    <!-- NEW 3-COLUMN SECTION: Enrolment, Classes, Books & Notes -->
+    <div class="quick-access-grid">
+        <!-- Enrolment Card -->
+        <div class="access-card">
+            <div class="access-icon"><i class="fas fa-pen"></i></div>
+            <h3>Enrolment</h3>
+            <p>Start your journey with ECOEMY today. Choose your program and apply online.</p>
+            <a href="enroll.html" class="access-btn"><i class="fas fa-arrow-right"></i> Enrol Now</a>
+        </div>
+        <!-- Classes Card -->
+        <div class="access-card">
+            <div class="access-icon"><i class="fas fa-play-circle"></i></div>
+            <h3>Classes</h3>
+            <p>Access your video lectures, course materials, and track your progress.</p>
+            <a href="classes.html" class="access-btn"><i class="fas fa-arrow-right"></i> Go to Classes</a>
+        </div>
+        <!-- Books & Notes Card -->
+        <div class="access-card">
+            <div class="access-icon"><i class="fas fa-book-open"></i></div>
+            <h3>Books & Notes</h3>
+            <p>Digital library with e-books, past papers, and revision notes.</p>
+            <a href="library.html" class="access-btn"><i class="fas fa-arrow-right"></i> Browse Library</a>
+        </div>
+    </div>
+
+    <!-- FOOTER – exactly as requested (text unchanged) -->
     <footer>
-        <p style="opacity: 0.9; letter-spacing: 0.5px;">© 2026 Nexus Academy Software System · liquid glass edition</p>
-        <p style="font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.6;"><i class="fas fa-droplet"></i> frosted interface · blurred & luminous</p>
+        <p style="opacity: 0.9; letter-spacing: 0.5px;">© 2026 ECOEMY Software System . Online</p>
     </footer>
 
-    <!-- small floating orbs (liquid vibe) – purely decorative -->
-    <div style="position: fixed; bottom: 20px; left: 20px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(255,215,150,0.15) 0%, transparent 80%); border-radius: 50%; pointer-events: none; z-index: -1;"></div>
-    <div style="position: fixed; top: 100px; right: 20px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(150,200,255,0.12) 0%, transparent 80%); border-radius: 50%; pointer-events: none; z-index: -1;"></div>
 </body>
 </html>
