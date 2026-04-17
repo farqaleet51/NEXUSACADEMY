@@ -2,11 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Academy · liquid e‑book store</title>
-    <!-- JS file for all logic -->
-    <link href="ECOMEY.JS">
-    <!-- Font Awesome Icons (optional but nice) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ECOEMY · Teacher Resource Uploader</title>
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -15,39 +13,39 @@
             box-sizing: border-box;
         }
 
-        /* liquid glass colour variables – soft, translucent, ethereal */
+        /* LIQUID GLASS VARIABLES */
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.12);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.1);
-            --backdrop-blur: blur(14px) saturate(200%);
-            --primary-soft: rgba(90, 120, 230, 0.65);
-            --accent-glow: rgba(255, 200, 70, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.18);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
+            --backdrop-blur: blur(12px) saturate(180%);
             --text-light: #f2f2f2;
-            --text-dark: #1e1e2f;
             --deep-bg-start: #0b0f1c;
             --deep-bg-end: #19233f;
+            --gold-accent: #ffd966;
+            --success-green: #4caf50;
+            --warning-orange: #ff9800;
         }
 
         body {
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
             background: linear-gradient(145deg, var(--deep-bg-start), var(--deep-bg-end));
             min-height: 100vh;
             color: var(--text-light);
             backdrop-filter: blur(2px);
             margin: 0;
             line-height: 1.5;
+            padding-bottom: 3rem;
         }
 
-        /* smooth scrolling */
         html { scroll-behavior: smooth; }
 
-        /* ===== GLASS NAVIGATION ===== */
+        /* === GLASS NAVIGATION === */
         nav {
             position: sticky;
             top: 1.2rem;
             z-index: 1000;
-            max-width: 1300px;
+            max-width: 1400px;
             margin: 0 auto 1rem auto;
             width: 95%;
             display: flex;
@@ -59,362 +57,698 @@
             backdrop-filter: var(--backdrop-blur);
             border-radius: 60px;
             box-shadow: var(--glass-shadow);
-            transition: all 0.3s ease;
         }
 
         .logo h2 {
             font-weight: 600;
             font-size: 1.8rem;
-            letter-spacing: -0.5px;
             background: linear-gradient(130deg, #ffffff, #ffe6b0);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 2px 5px rgba(255,255,240,0.3);
         }
-
-        .logo span {
-            font-weight: 300;
-            background: none;
-            color: rgba(255,255,220,0.9);
-        }
+        .logo span { font-weight: 300; }
 
         .nav-links {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            gap: 0.8rem;
             flex-wrap: wrap;
         }
-
         .nav-links a {
             color: rgba(255,255,255,0.9);
             text-decoration: none;
-            padding: 0.6rem 1.2rem;
-            font-weight: 500;
-            font-size: 0.95rem;
+            padding: 0.5rem 1.2rem;
             border-radius: 40px;
-            background: transparent;
-            transition: all 0.2s ease;
+            font-weight: 500;
+            transition: 0.2s;
             border: 1px solid transparent;
         }
-
-        .nav-links a:hover {
-            background: rgba(255,255,255,0.1);
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(255,255,255,0.15);
             border-color: rgba(255,255,255,0.3);
-            backdrop-filter: blur(8px);
-            color: #fff7d7;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
         }
-
-        .btn-enroll {
-            background: rgba(242, 169, 0, 0.65) !important;
-            border: 1px solid rgba(255, 215, 100, 0.8) !important;
+        .btn-special {
+            background: rgba(242, 169, 0, 0.75) !important;
+            border: 1px solid rgba(255, 215, 100, 0.9) !important;
             color: #0a0a14 !important;
             font-weight: 700 !important;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 4px 12px rgba(255, 200, 50, 0.3);
         }
 
-        .btn-enroll:hover {
-            background: rgba(255, 180, 40, 0.85) !important;
-            border-color: #ffcf7a !important;
-            color: #000 !important;
-        }
-
-        /* ===== LIBRARY SECTION (glassy container) ===== */
-        .library-section {
-            max-width: 1300px;
+        /* MAIN CONTAINER */
+        .uploader-container {
+            max-width: 1200px;
             width: 95%;
-            margin: 2rem auto 3rem auto;
-            padding: 2.5rem 2rem;
+            margin: 1.5rem auto;
+        }
+
+        /* Header Section */
+        .page-header {
+            background: var(--glass-bg);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 48px;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .page-header h1 i {
+            color: var(--gold-accent);
+        }
+        .page-header p {
+            color: rgba(255,255,240,0.8);
+            margin-top: 0.5rem;
+        }
+
+        /* Two Column Layout */
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Glass Cards */
+        .glass-card {
             background: var(--glass-bg);
             backdrop-filter: var(--backdrop-blur);
             border: 1px solid var(--glass-border);
-            border-radius: 60px;
-            box-shadow: var(--glass-shadow);
+            border-radius: 40px;
+            padding: 1.8rem;
+            transition: all 0.25s ease;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(255,215,100,0.3);
+            padding-bottom: 0.8rem;
+        }
+        .card-header i {
+            font-size: 1.5rem;
+            color: var(--gold-accent);
+        }
+        .card-header h3 {
+            font-size: 1.3rem;
         }
 
-        /* section headings with liquid underline */
-        .library-section h2 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            background: linear-gradient(145deg, #ffffff, #ffecb3);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
-            margin-bottom: 0.2rem;
-            border-bottom: 4px solid rgba(255,215,100,0.5);
-            padding-bottom: 0.5rem;
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.2rem;
         }
-
-        .library-section h3 {
-            font-size: 2rem;
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
             font-weight: 500;
-            margin: 2.8rem 0 1.2rem 0;
-            background: linear-gradient(to right, #ffffff, #ffeec9);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            border-left: 6px solid var(--accent-glow);
-            padding-left: 1.2rem;
+            font-size: 0.9rem;
         }
-
-        /* ===== BOOK GRID (liquid glass cards) ===== */
-        .book-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 1.8rem;
-            margin-top: 1.5rem;
+        .form-group label i {
+            margin-right: 6px;
+            color: var(--gold-accent);
         }
-
-        .book-item {
-            background: var(--glass-bg);
-            backdrop-filter: blur(8px);
+        .form-control {
+            width: 100%;
+            background: rgba(255,255,255,0.1);
             border: 1px solid var(--glass-border);
             border-radius: 40px;
-            padding: 2rem 1.2rem 1.8rem 1.2rem;
-            text-align: center;
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.1);
-            box-shadow: 0 15px 30px -15px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .book-item:hover {
-            transform: translateY(-8px) scale(1.02);
-            background: rgba(255,255,255,0.22);
-            border-color: rgba(255, 215, 100, 0.7);
-            box-shadow: 0 25px 40px -15px #000, 0 0 0 2px rgba(255,210,90,0.2) inset;
-        }
-
-        /* glass droplet effect (reflection) */
-        .book-item::after {
-            content: '';
-            position: absolute;
-            top: -30px;
-            left: -30px;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.35), transparent 70%);
-            border-radius: 50%;
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.4));
-            background: rgba(255,255,240,0.1);
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 0.5rem 1rem;
-            border-radius: 80px;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .book-title {
-            font-weight: 600;
-            font-size: 1.2rem;
-            margin: 1rem 0 1.5rem 0;
-            color: rgba(255,255,250,0.95);
-            min-height: 3.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0,0,0,0.15);
-            border-radius: 40px;
-            padding: 0.5rem 0.8rem;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255,255,240,0.1);
-        }
-
-        .btn-read {
-            background: rgba(26, 42, 108, 0.6);
-            border: 1px solid rgba(255,255,255,0.25);
+            padding: 0.8rem 1.2rem;
             color: white;
-            text-decoration: none;
-            padding: 0.9rem 1.2rem;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--gold-accent);
+            background: rgba(255,255,255,0.15);
+        }
+        .form-control::placeholder {
+            color: rgba(255,255,240,0.5);
+        }
+        select.form-control {
+            cursor: pointer;
+        }
+        textarea.form-control {
+            border-radius: 24px;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* File Upload Area */
+        .file-upload-area {
+            border: 2px dashed rgba(255,215,100,0.5);
+            border-radius: 32px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            background: rgba(255,255,255,0.05);
+        }
+        .file-upload-area:hover {
+            border-color: var(--gold-accent);
+            background: rgba(255,215,100,0.1);
+        }
+        .file-upload-area i {
+            font-size: 2.5rem;
+            color: var(--gold-accent);
+            margin-bottom: 0.5rem;
+        }
+        .file-upload-area p {
+            font-size: 0.85rem;
+            color: rgba(255,255,240,0.7);
+        }
+        #fileInput {
+            display: none;
+        }
+        .file-name {
+            margin-top: 0.8rem;
+            font-size: 0.8rem;
+            color: var(--gold-accent);
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            background: rgba(242, 169, 0, 0.85);
+            border: none;
+            padding: 1rem;
             border-radius: 60px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            transition: all 0.2s ease;
-            backdrop-filter: blur(8px);
-            margin-top: 0.5rem;
-            display: inline-flex;
+            font-weight: 700;
+            font-size: 1rem;
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 1rem;
         }
-
-        .btn-read:hover {
-            background: var(--accent-glow);
-            border-color: #ffd966;
-            color: #0a0a14;
+        .btn-submit:hover {
+            background: #f3cf8a;
             transform: scale(1.02);
-            box-shadow: 0 10px 20px rgba(255,180,50,0.4);
         }
 
-        /* ===== FOOTER ===== */
-        footer {
-            max-width: 1300px;
-            width: 95%;
-            margin: 2rem auto 2rem auto;
-            padding: 1.8rem;
-            background: rgba(20, 25, 45, 0.45);
-            backdrop-filter: blur(14px) saturate(200%);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 60px;
-            color: rgba(255,255,240,0.9);
+        /* Recent Uploads List */
+        .uploads-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .upload-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            margin-bottom: 0.8rem;
+            transition: 0.2s;
+        }
+        .upload-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .upload-info {
+            flex: 1;
+        }
+        .upload-title {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+        .upload-meta {
+            font-size: 0.7rem;
+            color: rgba(255,255,240,0.6);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .upload-badge {
+            background: rgba(255,215,100,0.2);
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+        }
+        .delete-upload {
+            background: none;
+            border: none;
+            color: #ffa27a;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0.5rem;
+            transition: 0.2s;
+        }
+        .delete-upload:hover {
+            color: #ff5544;
+            transform: scale(1.1);
+        }
+        .empty-uploads {
             text-align: center;
-            font-size: 1rem;
-            font-weight: 300;
-            box-shadow: 0 -5px 30px rgba(0,0,0,0.3);
+            padding: 2rem;
+            color: rgba(255,255,240,0.6);
         }
 
-        /* floating background orbs */
-        #bg-orb-left {
+        /* Toast Notification */
+        .toast {
             position: fixed;
             bottom: 30px;
-            left: 20px;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(255,215,150,0.08) 0%, transparent 80%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: -1;
+            right: 30px;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--gold-accent);
+            border-radius: 60px;
+            padding: 0.8rem 1.5rem;
+            color: white;
+            z-index: 3000;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
         }
-        #bg-orb-right {
-            position: fixed;
-            top: 150px;
-            right: 20px;
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(150,200,255,0.06) 0%, transparent 80%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: -1;
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
-        /* responsive */
-        @media (max-width: 700px) {
-            nav {
-                flex-direction: column;
-                gap: 0.8rem;
-            }
-            .nav-links {
-                justify-content: center;
-            }
-            .library-section h2 {
-                font-size: 2.2rem;
-            }
-            .library-section h3 {
-                font-size: 1.7rem;
+        /* Floating Orbs */
+        #orb-bottom, #orb-top {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        #orb-bottom { bottom: 20px; left: 20px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,215,150,0.12) 0%, transparent 80%);}
+        #orb-top { top: 100px; right: 20px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(150,200,255,0.1) 0%, transparent 80%);}
+
+        footer {
+            max-width: 1200px;
+            width: 95%;
+            margin: 2rem auto 0;
+            padding: 1.5rem;
+            background: rgba(20,25,45,0.45);
+            backdrop-filter: blur(14px);
+            border-radius: 60px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 900px) {
+            .upload-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- LIQUID GLASS NAVIGATION (frosted & floating) -->
+    
+ <!-- floating orbs -->
+    <div id="orb1"></div>
+    <div id="orb2"></div>
+
+    <!-- navigation -->
     <nav>
         <div class="logo">
             <h2>ECO<span>EMY</span></h2>
         </div>
         <div class="nav-links">
-            <a href="index.html"><i class="fas fa-home" style="margin-right: 6px;"></i>Home</a>
-            <a href="classes.html"><i class="fas fa-chalkboard-teacher"></i> My Classes</a>
-            <a href="library.html" style="background: rgba(255,255,255,0.15);"><i class="fas fa-book" style="margin-right: 6px;"></i>E-Book Store</a>
-            <a href="enroll.html" class="btn-enroll"><i class="fas fa-gem" style="margin-right: 6px;"></i>Enroll Now</a>
+            <a href="classesu.html"><i class="fas fa-chalkboard-teacher"></i> My Classes</a>
+            <a href="library.html"><i class="fas fa-book" style="margin-right: 6px;"></i>E-Book Store</a>
+            <a href="Exam.html" style="background: rgba(255,255,255,0.15);"><i class="fas fa-gem"></i> Exam Maker</a>
+            
         </div>
     </nav>
+    
+    <main class="uploader-container">
+        <div class="page-header">
+            <h1><i class="fas fa-cloud-upload-alt"></i> Resource Uploader</h1>
+            <p>Upload books, revision notes, past papers, and learning materials for your students</p>
+        </div>
 
-        <!-- MAIN LIBRARY SECTION – fully liquid glass -->
-        <div class="library-section">
-            <h2><i class="fas fa-book-open" style="margin-right: 15px;"></i>Digital Resource Center</h2>
-            
-            <!-- Past Papers & Revision Notes -->
-            <h3><i class="fas fa-history" style="margin-right: 10px;"></i>Revision Notes</h3>
-            <div class="book-grid">
-                <!-- REPLACE # WITH YOUR GOOGLE DRIVE SHARABLE LINK -->
-                <div class="book-item">
-                    <span class="icon">📄</span>
-                    <div class="book-title">2024 IGCSE Mathematics</div>
-                    <a href="#" class="btn-read" target="_blank" rel="noopener"><i class="fas fa-download"></i> Download PDF</a>
+        <div class="upload-grid">
+            <!-- LEFT COLUMN: Upload Form -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <i class="fas fa-plus-circle"></i>
+                    <h3>Upload New Resource</h3>
                 </div>
-                <!-- REPLACE # WITH YOUR GOOGLE DRIVE SHARABLE LINK -->
-                <div class="book-item">
-                    <span class="icon">📄</span>
-                    <div class="book-title">Business Ethics Lecture Notes</div>
-                    <a href="#" class="btn-read" target="_blank" rel="noopener"><i class="fas fa-eye"></i> View Online</a>
-                </div>
-                <!-- REPLACE # WITH YOUR GOOGLE DRIVE SHARABLE LINK -->
-                <div class="book-item">
-                    <span class="icon">📄</span>
-                    <div class="book-title">A-Level Econ Paper 1 (May/June)</div>
-                    <a href="#" class="btn-read" target="_blank" rel="noopener"><i class="fas fa-download"></i> Download PDF</a>
-                </div>
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <label><i class="fas fa-tag"></i> Resource Title *</label>
+                        <input type="text" class="form-control" id="resourceTitle" placeholder="e.g., A-Level Economics Revision Guide 2026" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-layer-group"></i> Category *</label>
+                        <select class="form-control" id="resourceCategory" required>
+                            <option value="">Select category</option>
+                            <option value="textbook">📚 Textbook</option>
+                            <option value="revision">📝 Revision Notes</option>
+                            <option value="pastpaper">📄 Past Paper</option>
+                            <option value="worksheet">✏️ Worksheet / Exercise</option>
+                            <option value="slides">🎓 Lecture Slides</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-graduation-cap"></i> Subject / Course</label>
+                        <input type="text" class="form-control" id="resourceSubject" placeholder="e.g., Economics, Business, Mathematics" value="Economics">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-chart-line"></i> Level</label>
+                        <select class="form-control" id="resourceLevel">
+                            <option value="IGCSE">IGCSE</option>
+                            <option value="A-Level" selected>A-Level</option>
+                            <option value="BTEC">BTEC</option>
+                            <option value="GCSE">GCSE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-align-left"></i> Description (optional)</label>
+                        <textarea class="form-control" id="resourceDescription" placeholder="Brief description of this resource..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-file-alt"></i> File Upload *</label>
+                        <div class="file-upload-area" id="fileUploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click or drag & drop to upload</p>
+                            <p style="font-size: 0.7rem;">PDF, DOC, PPT, ZIP (Max 50MB)</p>
+                            <div id="fileNameDisplay" class="file-name"></div>
+                        </div>
+                        <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.zip,.txt">
+                    </div>
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <i class="fas fa-upload"></i> Publish Resource
+                    </button>
+                </form>
             </div>
 
-            <!-- Past Paper -->
-            <h3><i class="fas fa-gem" style="margin-right: 10px;"></i> Past Papers (Advanced preparation)</h3>
-            <div class="book-grid">
-                <!-- REPLACE # WITH YOUR GOOGLE DRIVE SHARABLE LINK -->
-                <div class="book-item">
-                    <span class="icon">🗞️</span>
-                    <div class="book-title">2024 Math 0480 P2</div>
-                    <a href="#" class="btn-read" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Open Past paper</a>
+            <!-- RIGHT COLUMN: Recent Uploads -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <i class="fas fa-history"></i>
+                    <h3>Recently Uploaded</h3>
                 </div>
-                <!-- REPLACE # WITH YOUR GOOGLE DRIVE SHARABLE LINK -->
-                <div class="book-item">
-                    <span class="icon">🗞️</span>
-                    <div class="book-title">Economic 0455 P1</div>
-                    <a href="#" class="btn-read" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Open Past paper</a>
-                </div>
-                <!-- REPLACE # WITH YOUR GOOGLE DRIVE SHARABLE LINK -->
-                <div class="book-item">
-                    <span class="icon">🗞️</span>
-                    <div class="book-title">English 0500</div>
-                    <a href="#" class="btn-read" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Open Past paper</a>
-                </div>
-            </div>
-
-             <!-- Further Interest (Deep Learning) -->
-            <h3><i class="fas fa-gem" style="margin-right: 10px;"></i> Further Interest (Deep Learning)</h3>
-            <div class="book-grid">
-                <!-- REPLACE # WITH YOUR GOOGLE DRIVE SHARABLE LINK -->
-                <div class="book-item">
-                    <span class="icon">📘</span>
-                    <div class="book-title">Lean Startup Methodology</div>
-                    <a href="#" class="btn-read" target="_blank" rel="noopener"><i class="fas fa-book-open"></i> Open E-Book</a>
-                </div>
-                <!-- REPLACE # WITH YOUR GOOGLE DRIVE SHARABLE LINK -->
-                <div class="book-item">
-                    <span class="icon">📘</span>
-                    <div class="book-title">Advanced Macroeconomics</div>
-                    <a href="#" class="btn-read" target="_blank" rel="noopener"><i class="fas fa-book-open"></i> Open E-Book</a>
-                </div>
-                <!-- REPLACE # WITH YOUR GOOGLE DRIVE SHARABLE LINK -->
-                <div class="book-item">
-                    <span class="icon">📘</span>
-                    <div class="book-title">Corporate Governance 101</div>
-                    <a href="#" class="btn-read" target="_blank" rel="noopener"><i class="fas fa-book-open"></i> Open E-Book</a>
+                <div id="uploadsList" class="uploads-list">
+                    <div class="empty-uploads">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; opacity: 0.5;"></i>
+                        <p>No resources uploaded yet</p>
+                        <p style="font-size: 0.8rem;">Use the form to add learning materials</p>
+                    </div>
                 </div>
             </div>
         </div>
+    </main>
 
-    <!-- FOOTER – exactly as requested (text unchanged) -->
     <footer>
-        <p style="opacity: 0.9; letter-spacing: 0.5px;">© 2026 ECOEMY Software System . Online</p>
+        <p>© 2026 ECOEMY Teacher Resource Hub — Share knowledge, empower students.</p>
     </footer>
 
+    <script>
+        // ---------- STORAGE ----------
+        // Load existing uploads from localStorage
+        let uploadedResources = [];
+
+        function loadUploadsFromStorage() {
+            const stored = localStorage.getItem('ecoemy_teacher_uploads');
+            if (stored) {
+                uploadedResources = JSON.parse(stored);
+            } else {
+                // Sample demo uploads for demonstration
+                uploadedResources = [
+                    {
+                        id: "upload_1",
+                        title: "Economics A-Level Revision Notes 2025",
+                        category: "revision",
+                        subject: "Economics",
+                        level: "A-Level",
+                        description: "Complete revision notes for all modules",
+                        fileName: "economics_revision_2025.pdf",
+                        fileSize: "2.4 MB",
+                        dateUploaded: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
+                    },
+                    {
+                        id: "upload_2",
+                        title: "IGCSE Mathematics Past Papers 2024",
+                        category: "pastpaper",
+                        subject: "Mathematics",
+                        level: "IGCSE",
+                        description: "May/June 2024 session with mark scheme",
+                        fileName: "math_igcse_2024.pdf",
+                        fileSize: "5.1 MB",
+                        dateUploaded: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+                    },
+                    {
+                        id: "upload_3",
+                        title: "Business Management Lecture Slides",
+                        category: "slides",
+                        subject: "Business",
+                        level: "A-Level",
+                        description: "Complete term slides for Business Studies",
+                        fileName: "business_slides_2026.pptx",
+                        fileSize: "12.3 MB",
+                        dateUploaded: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+                    }
+                ];
+                saveUploadsToStorage();
+            }
+            renderUploadsList();
+        }
+
+        function saveUploadsToStorage() {
+            localStorage.setItem('ecoemy_teacher_uploads', JSON.stringify(uploadedResources));
+        }
+
+        // Helper: format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+            if (diffDays === 0) return "Today";
+            if (diffDays === 1) return "Yesterday";
+            if (diffDays < 7) return `${diffDays} days ago`;
+            return date.toLocaleDateString();
+        }
+
+        // Get category icon
+        function getCategoryIcon(category) {
+            const icons = {
+                textbook: "fa-book",
+                revision: "fa-sticky-note",
+                pastpaper: "fa-file-pdf",
+                worksheet: "fa-pencil-alt",
+                slides: "fa-chalkboard"
+            };
+            return icons[category] || "fa-file";
+        }
+
+        function getCategoryName(category) {
+            const names = {
+                textbook: "Textbook",
+                revision: "Revision Notes",
+                pastpaper: "Past Paper",
+                worksheet: "Worksheet",
+                slides: "Lecture Slides"
+            };
+            return names[category] || category;
+        }
+
+        // Render uploads list
+        function renderUploadsList() {
+            const container = document.getElementById('uploadsList');
+            if (!container) return;
+
+            if (uploadedResources.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-uploads">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; opacity: 0.5;"></i>
+                        <p>No resources uploaded yet</p>
+                        <p style="font-size: 0.8rem;">Use the form to add learning materials</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            // Show most recent first
+            [...uploadedResources].reverse().forEach(resource => {
+                const item = document.createElement('div');
+                item.className = 'upload-item';
+                item.innerHTML = `
+                    <div class="upload-info">
+                        <div class="upload-title">${escapeHtml(resource.title)}</div>
+                        <div class="upload-meta">
+                            <span><i class="fas ${getCategoryIcon(resource.category)}"></i> ${getCategoryName(resource.category)}</span>
+                            <span><i class="fas fa-book"></i> ${escapeHtml(resource.subject)}</span>
+                            <span><i class="fas fa-chart-line"></i> ${escapeHtml(resource.level)}</span>
+                            <span><i class="far fa-clock"></i> ${formatDate(resource.dateUploaded)}</span>
+                        </div>
+                        <div class="upload-meta" style="margin-top: 4px;">
+                            <span><i class="fas fa-file"></i> ${escapeHtml(resource.fileName)}</span>
+                            <span><i class="fas fa-database"></i> ${resource.fileSize || "~2 MB"}</span>
+                        </div>
+                    </div>
+                    <button class="delete-upload" data-id="${resource.id}">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                `;
+                const deleteBtn = item.querySelector('.delete-upload');
+                deleteBtn.addEventListener('click', () => deleteResource(resource.id));
+                container.appendChild(item);
+            });
+        }
+
+        function deleteResource(id) {
+            uploadedResources = uploadedResources.filter(r => r.id !== id);
+            saveUploadsToStorage();
+            renderUploadsList();
+            showToast("Resource deleted successfully", "info");
+        }
+
+        // Show toast notification
+        function showToast(message, type = "success") {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-info-circle'}" style="color: var(--gold-accent);"></i> ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Generate unique ID
+        function generateId() {
+            return 'upload_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+        }
+
+        // Simulate file size (since we can't actually read file size easily without File API)
+        function getFileSizeString(file) {
+            if (!file) return "Unknown";
+            const bytes = file.size;
+            if (bytes < 1024) return bytes + " B";
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+            return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+        }
+
+        // Handle form submission
+        let selectedFile = null;
+        let selectedFileName = "";
+
+        // File upload area handlers
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+        fileUploadArea.addEventListener('click', () => fileInput.click());
+        fileUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUploadArea.style.borderColor = 'var(--gold-accent)';
+            fileUploadArea.style.background = 'rgba(255,215,100,0.15)';
+        });
+        fileUploadArea.addEventListener('dragleave', () => {
+            fileUploadArea.style.borderColor = 'rgba(255,215,100,0.5)';
+            fileUploadArea.style.background = 'rgba(255,255,255,0.05)';
+        });
+        fileUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUploadArea.style.borderColor = 'rgba(255,215,100,0.5)';
+            fileUploadArea.style.background = 'rgba(255,255,255,0.05)';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelection(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelection(e.target.files[0]);
+            }
+        });
+
+        function handleFileSelection(file) {
+            const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
+                                  'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                                  'application/zip', 'text/plain'];
+            if (!allowedTypes.includes(file.type) && !file.name.endsWith('.pdf') && !file.name.endsWith('.zip')) {
+                showToast("Please upload PDF, DOC, PPT, or ZIP files only", "info");
+                return;
+            }
+            if (file.size > 50 * 1024 * 1024) {
+                showToast("File size must be less than 50MB", "info");
+                return;
+            }
+            selectedFile = file;
+            selectedFileName = file.name;
+            fileNameDisplay.innerHTML = `<i class="fas fa-check-circle"></i> ${escapeHtml(file.name)} (${getFileSizeString(file)})`;
+            fileNameDisplay.style.color = '#4caf50';
+        }
+
+        // Submit new resource
+        document.getElementById('uploadForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('resourceTitle').value.trim();
+            const category = document.getElementById('resourceCategory').value;
+            const subject = document.getElementById('resourceSubject').value.trim();
+            const level = document.getElementById('resourceLevel').value;
+            const description = document.getElementById('resourceDescription').value.trim();
+            
+            if (!title) {
+                showToast("Please enter a resource title", "info");
+                return;
+            }
+            if (!category) {
+                showToast("Please select a category", "info");
+                return;
+            }
+            if (!selectedFile) {
+                showToast("Please select a file to upload", "info");
+                return;
+            }
+            
+            // Create new resource object
+            const newResource = {
+                id: generateId(),
+                title: title,
+                category: category,
+                subject: subject || "General",
+                level: level,
+                description: description,
+                fileName: selectedFileName,
+                fileSize: getFileSizeString(selectedFile),
+                dateUploaded: new Date().toISOString()
+            };
+            
+            uploadedResources.unshift(newResource);
+            saveUploadsToStorage();
+            renderUploadsList();
+            
+            // Reset form
+            document.getElementById('uploadForm').reset();
+            selectedFile = null;
+            selectedFileName = "";
+            fileNameDisplay.innerHTML = "";
+            fileNameDisplay.style.color = '';
+            
+            showToast(`"${title}" uploaded successfully! Students can now access it.`, "success");
+        });
+
+        // Escape HTML
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // Initialize
+        loadUploadsFromStorage();
+    </script>
 </body>
 </html>
+```

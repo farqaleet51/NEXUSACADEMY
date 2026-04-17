@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ECOEMY · Exam Builder (Teacher Studio)</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- html2pdf library for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* LIQUID GLASS VARIABLES (matching ECOEMY theme) */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.18);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
+            --backdrop-blur: blur(12px) saturate(180%);
+            --text-light: #f2f2f2;
+            --deep-bg-start: #0b0f1c;
+            --deep-bg-end: #19233f;
+            --gold-accent: #ffd966;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(145deg, var(--deep-bg-start), var(--deep-bg-end));
+            min-height: 100vh;
+            color: var(--text-light);
+            backdrop-filter: blur(2px);
+            margin: 0;
+            line-height: 1.5;
+            padding-bottom: 3rem;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        /* === GLASS NAVIGATION === */
+        nav {
+            position: sticky;
+            top: 1.2rem;
+            z-index: 1000;
+            max-width: 1400px;
+            margin: 0 auto 1rem auto;
+            width: 95%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 2rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 60px;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .logo h2 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            background: linear-gradient(130deg, #ffffff, #ffe6b0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo span { font-weight: 300; }
+
+        .nav-links {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+        }
+        .btn-special {
+            background: rgba(242, 169, 0, 0.75) !important;
+            border: 1px solid rgba(255, 215, 100, 0.9) !important;
+            color: #0a0a14 !important;
+            font-weight: 700 !important;
+        }
+
+        /* MAIN EXAM BUILDER CONTAINER */
+        .exam-builder {
+            max-width: 1300px;
+            width: 95%;
+            margin: 1.5rem auto;
+            background: var(--glass-bg);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 48px;
+            border: 1px solid var(--glass-border);
+            padding: 2rem;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(255,215,100,0.4);
+            padding-bottom: 1rem;
+        }
+        .title-area h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #fff, #ffecb3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .exam-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .exam-meta input {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            padding: 0.5rem 1rem;
+            color: white;
+            font-size: 0.9rem;
+        }
+        .exam-meta input::placeholder {
+            color: rgba(255,255,200,0.7);
+        }
+
+        /* buttons group */
+        .action-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            background: rgba(242, 169, 0, 0.85);
+            border: none;
+            padding: 0.8rem 1.6rem;
+            border-radius: 60px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #0b0715;
+            font-size: 1rem;
+        }
+        .btn-primary:hover {
+            background: #f3cf8a;
+            transform: scale(1.02);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid var(--glass-border);
+            padding: 0.8rem 1.6rem;
+            border-radius: 60px;
+            font-weight: 600;
+            color: #f5f0e0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* questions container */
+        .questions-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+            margin: 2rem 0;
+        }
+        .question-card {
+            background: rgba(25, 30, 50, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 40px;
+            border: 1px solid rgba(255,215,100,0.3);
+            padding: 1.5rem;
+            transition: 0.2s;
+        }
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .q-num {
+            font-weight: 700;
+            background: rgba(0,0,0,0.4);
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+        .remove-q {
+            background: none;
+            border: none;
+            color: #ffa27a;
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+        .question-text {
+            width: 100%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 0.8rem 1.2rem;
+            color: white;
+            font-size: 1rem;
+            margin: 0.8rem 0;
+        }
+        .options-area {
+            margin: 1rem 0 0.8rem;
+            padding-left: 1rem;
+        }
+        .option-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 0.6rem 0;
+            flex-wrap: wrap;
+        }
+        .option-input {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,215,100,0.4);
+            border-radius: 40px;
+            padding: 0.5rem 1rem;
+            flex: 1;
+            color: white;
+        }
+        .correct-radio {
+            accent-color: #ffd966;
+            width: 18px;
+            height: 18px;
+        }
+        .text-limit-info {
+            font-size: 0.8rem;
+            color: #ffdfaa;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .word-limit-line {
+            background: rgba(255,255,240,0.2);
+            height: 2px;
+            width: 100%;
+            max-width: 300px;
+            margin: 0.5rem 0;
+        }
+        .marks-input {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            padding: 0.4rem 1rem;
+            width: 100px;
+            color: white;
+        }
+        hr {
+            border-color: rgba(255,215,100,0.2);
+            margin: 0.5rem 0;
+        }
+        .badge-type {
+            background: rgba(0,0,0,0.5);
+            border-radius: 30px;
+            padding: 0.2rem 1rem;
+            font-size: 0.75rem;
+        }
+        /* floating orbs */
+        #orb-bottom, #orb-top {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        #orb-bottom { bottom: 20px; left: 20px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,215,150,0.12) 0%, transparent 80%);}
+        #orb-top { top: 100px; right: 20px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(150,200,255,0.1) 0%, transparent 80%);}
+
+        footer {
+            max-width: 1300px;
+            width: 95%;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: rgba(20,25,45,0.45);
+            backdrop-filter: blur(14px);
+            border-radius: 60px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        @media (max-width: 700px) {
+            .exam-builder { padding: 1.2rem; }
+            .header-section { flex-direction: column; align-items: start; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- floating orbs -->
+    <div id="orb1"></div>
+    <div id="orb2"></div>
+
+    <!-- navigation -->
+    <nav>
+        <div class="logo">
+            <h2>ECO<span>EMY</span></h2>
+        </div>
+        <div class="nav-links">
+            <a href="classesu.html"><i class="fas fa-chalkboard-teacher"></i> My Classes</a>
+            <a href="library.html"><i class="fas fa-book" style="margin-right: 6px;"></i>E-Book Store</a>
+            <a href="Exam.html" style="background: rgba(255,255,255,0.15);"><i class="fas fa-gem"></i> Exam Maker</a>
+            
+        </div>
+    </nav>
+
+    <main class="exam-builder" id="examBuilderContainer">
+        <div class="header-section">
+            <div class="title-area">
+                <h1><i class="fas fa-pen-ruler"></i> Exam & Test Creator</h1>
+                <div class="exam-meta">
+                    <input type="text" id="examTitle" placeholder="Exam Title e.g., 'Midterm - Economics'" value="ECOEMY Assessment">
+                    <input type="text" id="subjectField" placeholder="Subject / Course" value="Business Studies">
+                    <input type="text" id="dateField" placeholder="Date" value="April 2026">
+                </div>
+            </div>
+            <div class="action-bar">
+                <button class="btn-primary" id="addQuestionBtn"><i class="fas fa-plus-circle"></i> Add Question</button>
+                <button class="btn-secondary" id="saveAsPdfBtn"><i class="fas fa-file-pdf"></i> Save as PDF</button>
+            </div>
+        </div>
+
+        <!-- DYNAMIC QUESTIONS LIST -->
+        <div id="questionsList" class="questions-container"></div>
+        <div id="emptyMsg" style="text-align: center; padding: 2rem; color: #cfc5a5;">➕ Click "Add Question" to start building your exam. Choose MCQ or Text based.</div>
+    </main>
+
+    <footer>
+        <p>© 2026 ECOEMY Exam Studio — Secure assessment builder with PDF export.</p>
+    </footer>
+
+    <script>
+        // ---------- QUESTION DATA MODEL ----------
+        let questions = [];  // each item: { id, type, text, options, correctOptionIndex, wordLimit, marks }
+
+        let nextId = 1;
+
+        // DOM elements
+        const questionsContainer = document.getElementById('questionsList');
+        const emptyMsgDiv = document.getElementById('emptyMsg');
+        const addBtn = document.getElementById('addQuestionBtn');
+        const pdfBtn = document.getElementById('saveAsPdfBtn');
+
+        // Helper to re-render the entire question list
+        function renderQuestions() {
+            if (!questionsContainer) return;
+            if (questions.length === 0) {
+                emptyMsgDiv.style.display = 'block';
+                questionsContainer.innerHTML = '';
+                return;
+            }
+            emptyMsgDiv.style.display = 'none';
+            questionsContainer.innerHTML = '';
+            questions.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.dataset.id = q.id;
+                const qNumber = idx + 1;
+                let innerHtml = `
+                    <div class="question-header">
+                        <span class="q-num">Question ${qNumber} · <span class="badge-type">${q.type === 'mcq' ? 'Multiple Choice' : 'Text based'}</span></span>
+                        <button class="remove-q" data-id="${q.id}"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                    <textarea class="question-text" data-field="text" data-id="${q.id}" rows="2" placeholder="Enter your question here...">${escapeHtml(q.text)}</textarea>
+                `;
+                if (q.type === 'mcq') {
+                    innerHtml += `<div class="options-area" id="options-area-${q.id}">`;
+                    // render 4 options
+                    for (let i = 0; i < 4; i++) {
+                        const optValue = q.options[i] || '';
+                        const isChecked = (q.correctOptionIndex === i);
+                        innerHtml += `
+                            <div class="option-row">
+                                <input type="text" class="option-input" data-opt-index="${i}" data-id="${q.id}" value="${escapeHtml(optValue)}" placeholder="Option ${String.fromCharCode(65+i)}">
+                                <label style="display: flex; align-items: center; gap: 5px;"><input type="radio" name="correct_${q.id}" value="${i}" class="correct-radio" ${isChecked ? 'checked' : ''}> Correct</label>
+                            </div>
+                        `;
+                    }
+                    innerHtml += `<div class="text-limit-info"><i class="fas fa-trophy"></i> Marks for this MCQ: <input type="number" class="marks-input" data-marks-id="${q.id}" value="${q.marks || 1}" min="0.5" step="0.5" style="width: 80px;"></div>`;
+                    innerHtml += `</div>`;
+                } 
+                else {  // text based question
+                    const wordLimitVal = q.wordLimit || 100;
+                    innerHtml += `<div class="options-area">
+                        <div class="text-limit-info">
+                            <i class="fas fa-align-left"></i> Word limit: 
+                            <input type="number" id="wordLimit_${q.id}" class="marks-input" value="${wordLimitVal}" min="10" step="10" style="width: 100px;"> words
+                        </div>
+                        <div class="word-limit-line" style="width: 100%; height: 2px; background: rgba(255,215,100,0.4); margin: 10px 0;"></div>
+                        <div style="font-size: 0.8rem; opacity:0.8;">✍️ Answer lines will be generated based on word limit.</div>
+                        <div class="text-limit-info" style="margin-top: 12px;">
+                            <i class="fas fa-star-of-life"></i> Marks for this question: 
+                            <input type="number" class="marks-input" data-marks-id="${q.id}" value="${q.marks || 5}" min="1" step="1" style="width: 90px;">
+                        </div>
+                    </div>`;
+                }
+                card.innerHTML = innerHtml;
+                // attach event listeners for dynamic fields
+                const textarea = card.querySelector(`.question-text[data-id="${q.id}"]`);
+                if (textarea) {
+                    textarea.addEventListener('input', (e) => {
+                        q.text = e.target.value;
+                    });
+                }
+                if (q.type === 'mcq') {
+                    for (let i = 0; i < 4; i++) {
+                        const optInput = card.querySelector(`.option-input[data-id="${q.id}"][data-opt-index="${i}"]`);
+                        if (optInput) {
+                            optInput.addEventListener('input', (e) => {
+                                q.options[i] = e.target.value;
+                            });
+                        }
+                    }
+                    const radios = card.querySelectorAll(`input[name="correct_${q.id}"]`);
+                    radios.forEach(radio => {
+                        radio.addEventListener('change', (e) => {
+                            if (e.target.checked) {
+                                q.correctOptionIndex = parseInt(e.target.value);
+                            }
+                        });
+                    });
+                    const marksMcq = card.querySelector(`.marks-input[data-marks-id="${q.id}"]`);
+                    if (marksMcq) {
+                        marksMcq.addEventListener('input', (e) => {
+                            q.marks = parseFloat(e.target.value) || 1;
+                        });
+                    }
+                } else {
+                    const wordLimitInput = card.querySelector(`#wordLimit_${q.id}`);
+                    if (wordLimitInput) {
+                        wordLimitInput.addEventListener('input', (e) => {
+                            q.wordLimit = parseInt(e.target.value) || 50;
+                        });
+                    }
+                    const marksText = card.querySelector(`.marks-input[data-marks-id="${q.id}"]`);
+                    if (marksText) {
+                        marksText.addEventListener('input', (e) => {
+                            q.marks = parseFloat(e.target.value) || 5;
+                        });
+                    }
+                }
+                const removeBtn = card.querySelector('.remove-q');
+                if (removeBtn) {
+                    removeBtn.addEventListener('click', (e) => {
+                        const idToRemove = parseInt(removeBtn.dataset.id);
+                        removeQuestionById(idToRemove);
+                    });
+                }
+                questionsContainer.appendChild(card);
+            });
+        }
+
+        function removeQuestionById(id) {
+            questions = questions.filter(q => q.id !== id);
+            renderQuestions();
+        }
+
+        // Add question modal
+        function showAddQuestionDialog() {
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.backgroundColor = 'rgba(0,0,0,0.7)';
+            modal.style.backdropFilter = 'blur(12px)';
+            modal.style.zIndex = '2000';
+            modal.style.display = 'flex';
+            modal.style.alignItems = 'center';
+            modal.style.justifyContent = 'center';
+            
+            const modalCard = document.createElement('div');
+            modalCard.style.background = 'rgba(30,35,55,0.95)';
+            modalCard.style.backdropFilter = 'blur(16px)';
+            modalCard.style.border = '1px solid rgba(255,215,100,0.5)';
+            modalCard.style.borderRadius = '48px';
+            modalCard.style.padding = '2rem';
+            modalCard.style.width = '90%';
+            modalCard.style.maxWidth = '450px';
+            modalCard.style.textAlign = 'center';
+            modalCard.style.boxShadow = '0 25px 45px rgba(0,0,0,0.5)';
+            modalCard.innerHTML = `
+                <h2 style="margin-bottom: 1.5rem; color:#ffd966;"><i class="fas fa-question-circle"></i> Choose Question Type</h2>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <button id="modalMcqBtn" style="background: rgba(242,169,0,0.85); border: none; padding: 1rem; border-radius: 60px; font-weight: 700; font-size: 1.1rem; cursor: pointer; color:#0b0715;"><i class="fas fa-check-square"></i> Multiple Choice (MCQ)</button>
+                    <button id="modalTextBtn" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,215,100,0.6); padding: 1rem; border-radius: 60px; font-weight: 700; font-size: 1.1rem; cursor: pointer; color:#f5f0e0;"><i class="fas fa-paragraph"></i> Text based</button>
+                    <button id="modalCloseBtn" style="background: none; border: 1px solid rgba(255,255,255,0.3); margin-top: 0.8rem; padding: 0.6rem; border-radius: 40px; cursor: pointer; color:#ccc;">Cancel</button>
+                </div>
+            `;
+            modal.appendChild(modalCard);
+            document.body.appendChild(modal);
+            
+            const mcqBtn = document.getElementById('modalMcqBtn');
+            const textBtn = document.getElementById('modalTextBtn');
+            const closeBtn = document.getElementById('modalCloseBtn');
+            
+            const closeModal = () => modal.remove();
+            
+            mcqBtn.addEventListener('click', () => {
+                addNewMCQ();
+                closeModal();
+            });
+            textBtn.addEventListener('click', () => {
+                addNewTextQuestion();
+                closeModal();
+            });
+            closeBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+        }
+
+        function addNewMCQ() {
+            const newId = nextId++;
+            const newQuestion = {
+                id: newId,
+                type: 'mcq',
+                text: 'New multiple choice question',
+                options: ['Option A', 'Option B', 'Option C', 'Option D'],
+                correctOptionIndex: 0,
+                marks: 1,
+            };
+            questions.push(newQuestion);
+            renderQuestions();
+        }
+
+        function addNewTextQuestion() {
+            const newId = nextId++;
+            const newQuestion = {
+                id: newId,
+                type: 'text',
+                text: 'Write your essay / long answer question here.',
+                wordLimit: 100,
+                marks: 5,
+            };
+            questions.push(newQuestion);
+            renderQuestions();
+        }
+
+        // ----- PDF Export with clean formatting (no extra word limit text or suggestion lines) -----
+        async function exportToPDF() {
+            if (questions.length === 0) {
+                alert("⚠️ No questions added. Please add at least one question before exporting to PDF.");
+                return;
+            }
+
+            const examTitle = document.getElementById('examTitle').value || "Untitled Exam";
+            const subject = document.getElementById('subjectField').value || "General";
+            const examDate = document.getElementById('dateField').value || new Date().toLocaleDateString();
+
+            const pdfContent = document.createElement('div');
+            pdfContent.style.backgroundColor = '#0f0c1a';
+            pdfContent.style.color = '#f2f2f2';
+            pdfContent.style.fontFamily = "'Inter', 'Segoe UI', sans-serif";
+            pdfContent.style.padding = '2rem';
+            pdfContent.style.borderRadius = '24px';
+            pdfContent.style.maxWidth = '1100px';
+            pdfContent.style.margin = '0 auto';
+
+            // BOILERPLATE with logo
+            pdfContent.innerHTML = `
+                <div style="text-align: center; border-bottom: 2px solid #ffd966; padding-bottom: 1.2rem; margin-bottom: 1.8rem;">
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-bottom: 8px;">
+                        <i class="fas fa-graduation-cap" style="font-size: 3rem; color: #ffd966;"></i>
+                        <h1 style="font-size: 2.2rem; background: linear-gradient(135deg, #ffffff, #ffe6b0); -webkit-background-clip: text; background-clip: text; color: transparent; margin:0;">ECOEMY ACADEMY</h1>
+                    </div>
+                    <p style="letter-spacing: 1px; font-size: 0.85rem;">Empowering Global Education | Liquid Knowledge</p>
+                    <hr style="border-color: rgba(255,215,100,0.3); margin: 0.8rem 0;">
+                    <h2 style="font-size: 1.8rem; margin-top: 0.5rem;">${escapeHtml(examTitle)}</h2>
+                    <p><strong>Subject:</strong> ${escapeHtml(subject)} &nbsp;|&nbsp; <strong>Date:</strong> ${escapeHtml(examDate)}</p>
+                </div>
+                <div id="pdfQuestionsArea"></div>
+                <div style="margin-top: 2rem; text-align: right; font-size: 0.75rem; border-top: 1px solid rgba(255,215,100,0.3); padding-top: 1rem;">
+                    © ECOEMY Assessment · Teacher Generated Exam
+                </div>
+            `;
+            const questionsArea = pdfContent.querySelector('#pdfQuestionsArea');
+            
+            for (let idx = 0; idx < questions.length; idx++) {
+                const q = questions[idx];
+                const qNumber = idx + 1;
+                const questionText = q.text || "No question text";
+                const marksVal = q.type === 'mcq' ? (q.marks || 1) : (q.marks || 5);
+                
+                let qHtml = `<div style="margin-bottom: 2rem; background: rgba(255,255,255,0.08); border-radius: 28px; padding: 1.2rem; border-left: 5px solid #ffd966;">
+                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 0.5rem;">
+                        <strong style="font-size: 1.2rem;">Question ${qNumber} [${q.type === 'mcq' ? 'MCQ' : 'Text based'}]</strong>
+                        <span style="background: #ffd96620; padding: 0.2rem 0.8rem; border-radius: 40px;">${marksVal} marks</span>
+                    </div>
+                    <p style="margin: 0.8rem 0; font-weight: 500; line-height: 1.4;">${escapeHtml(questionText)}</p>`;
+                
+                if (q.type === 'mcq') {
+                    qHtml += `<div style="margin: 0.8rem 0 0 1rem;">`;
+                    const opts = q.options || ['','','',''];
+                    for (let i=0; i<4; i++) {
+                        const letter = String.fromCharCode(65+i);
+                        const isCorrect = (q.correctOptionIndex === i);
+                        const optText = opts[i] || `Option ${letter}`;
+                        qHtml += `<div style="margin: 8px 0; display: flex; align-items: center; gap: 10px;">
+                            <span style="font-weight:600; min-width: 28px;">${letter}.</span> 
+                            <span>${escapeHtml(optText)}</span>
+                            ${isCorrect ? '<span style="background:#2e7d32; padding:2px 10px; border-radius:30px; font-size:0.7rem; margin-left:8px;">✓ Correct</span>' : ''}
+                        </div>`;
+                    }
+                    qHtml += `</div><hr style="margin: 12px 0 6px 0;">`;
+                } 
+                else {  
+                    // TEXT BASED QUESTION - ONLY answer lines, NO word limit text, NO suggestion line
+                    const wordLimit = q.wordLimit || 100;
+                    // Generate clean answer lines (20px each) based on word limit (approx 1 line per 12 words)
+                    let lineCount = Math.min(14, Math.max(4, Math.floor(wordLimit / 12) + 2));
+                    qHtml += `<div style="margin: 1rem 0 0.5rem 0;">`;
+                    for (let l = 0; l < lineCount; l++) {
+                        qHtml += `<div style="height: 20px; border-bottom: 1px solid #ffd96680; margin-bottom: 10px; width: 100%;"></div>`;
+                    }
+                    qHtml += `</div><hr style="margin: 12px 0 6px 0;">`;
+                }
+                // Display marks at the end of each question (clean)
+                qHtml += `<div style="margin-top: 8px; font-size:0.85rem; text-align: right;"><i class="fas fa-star"></i> [${marksVal} marks]</div>`;
+                qHtml += `</div>`;
+                questionsArea.innerHTML += qHtml;
+            }
+
+            // add total marks summary
+            let totalMarks = 0;
+            for (let q of questions) {
+                totalMarks += (q.type === 'mcq' ? (q.marks || 1) : (q.marks || 5));
+            }
+            const summaryDiv = document.createElement('div');
+            summaryDiv.style.marginTop = '1.5rem';
+            summaryDiv.style.textAlign = 'right';
+            summaryDiv.style.fontWeight = 'bold';
+            summaryDiv.style.padding = '0.8rem';
+            summaryDiv.style.borderTop = '2px solid #ffd966';
+            summaryDiv.innerHTML = `<span style="background:#ffd96620; padding: 0.4rem 1rem; border-radius: 60px;">📊 Total Marks: ${totalMarks}</span>`;
+            pdfContent.appendChild(summaryDiv);
+
+            const opt = {
+                margin:        [0.5, 0.5, 0.5, 0.5],
+                filename:     `${examTitle.replace(/[^a-z0-9]/gi, '_')}_Exam.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, letterRendering: true, useCORS: true, backgroundColor: '#0f0c1a' },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(pdfContent).save();
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        addBtn.addEventListener('click', showAddQuestionDialog);
+        pdfBtn.addEventListener('click', exportToPDF);
+
+        function initSample() {
+            const sample = {
+                id: nextId++,
+                type: 'mcq',
+                text: 'What is the primary characteristic of a market economy?',
+                options: ['Central planning', 'Government ownership', 'Private property & price signals', 'Barter system'],
+                correctOptionIndex: 2,
+                marks: 2,
+            };
+            const sampleText = {
+                id: nextId++,
+                type: 'text',
+                text: 'Explain the impact of globalization on emerging markets. Provide examples.',
+                wordLimit: 120,
+                marks: 8,
+            };
+            questions.push(sample, sampleText);
+            renderQuestions();
+        }
+        if (questions.length === 0) initSample();
+        else renderQuestions();
+    </script>
+</body>
+</html>
+```

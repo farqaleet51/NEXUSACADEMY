@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ECOEMY · Student Dashboard</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js for analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* LIQUID GLASS VARIABLES */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.18);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
+            --backdrop-blur: blur(12px) saturate(180%);
+            --text-light: #f2f2f2;
+            --deep-bg-start: #0b0f1c;
+            --deep-bg-end: #19233f;
+            --gold-accent: #ffd966;
+            --card-hover: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(145deg, var(--deep-bg-start), var(--deep-bg-end));
+            min-height: 100vh;
+            color: var(--text-light);
+            backdrop-filter: blur(2px);
+            margin: 0;
+            line-height: 1.5;
+            padding-bottom: 2rem;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        /* === GLASS NAVIGATION === */
+        nav {
+            position: sticky;
+            top: 1.2rem;
+            z-index: 1000;
+            max-width: 1400px;
+            margin: 0 auto 1rem auto;
+            width: 95%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 2rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 60px;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .logo h2 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            background: linear-gradient(130deg, #ffffff, #ffe6b0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo span { font-weight: 300; }
+
+        .nav-links {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.3);
+        }
+        .btn-special {
+            background: rgba(242, 169, 0, 0.75) !important;
+            border: 1px solid rgba(255, 215, 100, 0.9) !important;
+            color: #0a0a14 !important;
+            font-weight: 700 !important;
+        }
+
+        /* MAIN DASHBOARD CONTAINER */
+        .dashboard {
+            max-width: 1400px;
+            width: 95%;
+            margin: 1rem auto;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 48px;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .welcome-text h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+        }
+        .welcome-text h1 i {
+            color: var(--gold-accent);
+            margin-right: 8px;
+        }
+        .welcome-text p {
+            color: rgba(255,255,240,0.8);
+        }
+        .student-stats {
+            display: flex;
+            gap: 1.5rem;
+            background: rgba(0,0,0,0.3);
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gold-accent);
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--backdrop-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            padding: 1.5rem;
+            transition: all 0.25s ease;
+        }
+        .glass-card:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,215,100,0.4);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            border-bottom: 2px solid rgba(255,215,100,0.3);
+            padding-bottom: 0.8rem;
+        }
+        .card-header h3 {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-header h3 i {
+            color: var(--gold-accent);
+        }
+        .view-all {
+            font-size: 0.8rem;
+            color: var(--gold-accent);
+            text-decoration: none;
+        }
+
+        /* Course List */
+        .course-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .course-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+        .course-info p {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+        .progress {
+            width: 80px;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--gold-accent);
+            border-radius: 10px;
+        }
+
+        /* Exam Schedule */
+        .exam-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .exam-date {
+            background: rgba(255,215,100,0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .exam-name {
+            flex: 1;
+            margin-left: 1rem;
+        }
+        .exam-status {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            background: rgba(46,125,50,0.5);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            height: 200px;
+            margin-top: 0.5rem;
+        }
+
+        /* Recent Activity */
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255,215,100,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .activity-detail {
+            flex: 1;
+        }
+        .activity-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .activity-time {
+            font-size: 0.7rem;
+            opacity: 0.6;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        .action-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            color: var(--text-light);
+        }
+        .action-btn:hover {
+            background: rgba(242, 169, 0, 0.3);
+            border-color: var(--gold-accent);
+            transform: translateY(-2px);
+        }
+        .action-btn i {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            color: var(--gold-accent);
+        }
+
+        /* Floating Orbs */
+        #orb-bottom, #orb-top {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        #orb-bottom { bottom: 20px; left: 20px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,215,150,0.12) 0%, transparent 80%);}
+        #orb-top { top: 100px; right: 20px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(150,200,255,0.1) 0%, transparent 80%);}
+
+        footer {
+            max-width: 1400px;
+            width: 95%;
+            margin: 2rem auto 0;
+            padding: 1.5rem;
+            background: rgba(20,25,45,0.45);
+            backdrop-filter: blur(14px);
+            border-radius: 60px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .welcome-section { flex-direction: column; text-align: center; gap: 1rem; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo"><h2>ECO<span>EMY</span></h2></div>
+        <div class="nav-links">
+            <a href="STu.exam.html"><i class="fas fa-file-alt"></i> My Exams</a>
+            <a href="Rosouresstoey.html"><i class="fas fa-book"></i> Resources shop</a>
+            <a href="Rosoures.html"><i class="fas- fa-book-open">Rosoures</i></a>
+            <a href="classes.html"><i class="fas- fas fa-chalkboard-teacher">Classes</i></a>
+            <a href="Dashboard.html"><i class="fas fa-user-graduate"></i> Profile</a>
+        </div>
+    </nav>
+
+    <main class="dashboard">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="welcome-text">
+                <h1><i class="fas fa-hand-peace"></i> Welcome back, Alex!</h1>
+                <p>Your learning journey continues. Keep up the great momentum! 📚</p>
+            </div>
+            <div class="student-stats">
+                <div class="stat">
+                    <div class="stat-number" id="coursesCount">4</div>
+                    <div class="stat-label">Enrolled Courses</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="completedCount">3</div>
+                    <div class="stat-label">Completed Exams</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="avgScore">86<span style="font-size:1rem;">%</span></div>
+                    <div class="stat-label">Avg. Score</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- My Courses Card -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-graduation-cap"></i> My Courses</h3>
+                    <a href="#" class="view-all">View all →</a>
+                </div>
+                <div id="coursesList">
+                    <!-- dynamic courses -->
+                </div>
+            </div>
+
+            <!-- Upcoming Exams Card -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-calendar-check"></i> Upcoming Exams</h3>
+                    <a href="#" class="view-all">Schedule →</a>
+                </div>
+                <div id="examsList">
+                    <!-- dynamic exams -->
+                </div>
+            </div>
+
+            <!-- Performance Chart Card -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-line"></i> Performance Trend</h3>
+                    <span style="font-size:0.7rem;">Last 4 assessments</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Activity Card -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                    <a href="#" class="view-all">History →</a>
+                </div>
+                <div id="activityList">
+                    <!-- dynamic activity -->
+                </div>
+            </div>
+
+            <!-- Quick Actions Card -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                </div>
+                <div class="quick-actions">
+                    <a href="#" class="action-btn" id="goToExamsBtn">
+                        <i class="fas fa-file-alt"></i>
+                        <span>View Exams</span>
+                    </a>
+                    <a href="#" class="action-btn" id="goToLibraryBtn">
+                        <i class="fas fa-book"></i>
+                        <span>E-Book Store</span>
+                    </a>
+                    <a href="#" class="action-btn" id="goToClassesBtn">
+                        <i class="fas fa-video"></i>
+                        <span>My Classes</span>
+                    </a>
+                    <a href="#" class="action-btn" id="downloadResourcesBtn">
+                        <i class="fas fa-download"></i>
+                        <span>Study Materials</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Announcements Card -->
+            <div class="glass-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-bullhorn"></i> Announcements</h3>
+                </div>
+                <div id="announcementsList">
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas fa-megaphone"></i></div>
+                        <div class="activity-detail">
+                            <div class="activity-title">New practice papers available</div>
+                            <div class="activity-time">2 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas fa-calendar"></i></div>
+                        <div class="activity-detail">
+                            <div class="activity-title">Midterm schedule released</div>
+                            <div class="activity-time">Yesterday</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas fa-trophy"></i></div>
+                        <div class="activity-detail">
+                            <div class="activity-title">Study group: Economics revision</div>
+                            <div class="activity-time">Mar 28, 2026</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 ECOEMY Student Dashboard — Your academic command center.</p>
+    </footer>
+
+    <script>
+        // Student Data (simulated)
+        const studentData = {
+            courses: [
+                { name: "Economics (A-Level)", instructor: "Dr. Sarah Chen", progress: 78, nextLesson: "Market Structures" },
+                { name: "Business Management", instructor: "Prof. James Wright", progress: 65, nextLesson: "Leadership Styles" },
+                { name: "Mathematics (IGCSE)", instructor: "Ms. Emily Park", progress: 92, nextLesson: "Calculus Review" },
+                { name: "English Literature", instructor: "Dr. Robert Frost", progress: 45, nextLesson: "Poetry Analysis" }
+            ],
+            upcomingExams: [
+                { name: "Economics Midterm", date: "Apr 15, 2026", status: "In 7 days", subject: "Economics" },
+                { name: "Business Quiz", date: "Apr 10, 2026", status: "In 2 days", subject: "Business" },
+                { name: "Mathematics Test", date: "Apr 22, 2026", status: "In 14 days", subject: "Mathematics" }
+            ],
+            recentActivities: [
+                { action: "Completed assignment: Supply & Demand", time: "2 hours ago", icon: "fa-check-circle" },
+                { action: "Downloaded exam paper: Economics 2024", time: "Yesterday", icon: "fa-download" },
+                { action: "Watched video: Market Equilibrium", time: "Mar 28, 2026", icon: "fa-play-circle" },
+                { action: "Submitted essay: Globalization impact", time: "Mar 27, 2026", icon: "fa-file-alt" }
+            ],
+            performanceScores: [82, 79, 88, 91, 86, 89]  // last 6 assessments
+        };
+
+        // Render Courses
+        function renderCourses() {
+            const container = document.getElementById('coursesList');
+            if (!container) return;
+            container.innerHTML = '';
+            studentData.courses.forEach(course => {
+                const courseDiv = document.createElement('div');
+                courseDiv.className = 'course-item';
+                courseDiv.innerHTML = `
+                    <div class="course-info">
+                        <h4>${escapeHtml(course.name)}</h4>
+                        <p>${escapeHtml(course.instructor)} · Next: ${escapeHtml(course.nextLesson)}</p>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-fill" style="width: ${course.progress}%;"></div>
+                    </div>
+                `;
+                container.appendChild(courseDiv);
+            });
+        }
+
+        // Render Upcoming Exams
+        function renderExams() {
+            const container = document.getElementById('examsList');
+            if (!container) return;
+            container.innerHTML = '';
+            studentData.upcomingExams.forEach(exam => {
+                const examDiv = document.createElement('div');
+                examDiv.className = 'exam-item';
+                examDiv.innerHTML = `
+                    <div class="exam-date">${escapeHtml(exam.date)}</div>
+                    <div class="exam-name">
+                        <strong>${escapeHtml(exam.name)}</strong><br>
+                        <span style="font-size:0.7rem;">${escapeHtml(exam.subject)}</span>
+                    </div>
+                    <div class="exam-status">${escapeHtml(exam.status)}</div>
+                `;
+                container.appendChild(examDiv);
+            });
+        }
+
+        // Render Recent Activity
+        function renderActivity() {
+            const container = document.getElementById('activityList');
+            if (!container) return;
+            container.innerHTML = '';
+            studentData.recentActivities.forEach(act => {
+                const actDiv = document.createElement('div');
+                actDiv.className = 'activity-item';
+                actDiv.innerHTML = `
+                    <div class="activity-icon"><i class="fas ${act.icon}"></i></div>
+                    <div class="activity-detail">
+                        <div class="activity-title">${escapeHtml(act.action)}</div>
+                        <div class="activity-time">${escapeHtml(act.time)}</div>
+                    </div>
+                `;
+                container.appendChild(actDiv);
+            });
+        }
+
+        // Initialize Chart.js Performance Chart
+        let performanceChart = null;
+        function initPerformanceChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            if (performanceChart) performanceChart.destroy();
+            performanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Exam 1', 'Exam 2', 'Exam 3', 'Exam 4', 'Exam 5', 'Exam 6'],
+                    datasets: [{
+                        label: 'Score (%)',
+                        data: studentData.performanceScores,
+                        borderColor: '#ffd966',
+                        backgroundColor: 'rgba(255, 217, 102, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ffd966',
+                        pointBorderColor: '#0b0f1c',
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { labels: { color: '#f2f2f2', font: { size: 11 } } },
+                        tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', titleColor: '#ffd966' }
+                    },
+                    scales: {
+                        y: { 
+                            min: 50, 
+                            max: 100,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#f2f2f2' }
+                        },
+                        x: { 
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: { color: '#f2f2f2' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Helper: escape HTML
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // Update stats numbers (simulate dynamic)
+        function updateStats() {
+            document.getElementById('coursesCount').innerText = studentData.courses.length;
+            document.getElementById('completedCount').innerText = "3";
+            document.getElementById('avgScore').innerHTML = "86<span style=\"font-size:1rem;\">%</span>";
+        }
+
+        // Quick action buttons (simulate navigation)
+        function setupQuickActions() {
+            const goToExams = document.getElementById('goToExamsBtn');
+            const goToLibrary = document.getElementById('goToLibraryBtn');
+            const goToClasses = document.getElementById('goToClassesBtn');
+            const downloadResources = document.getElementById('downloadResourcesBtn');
+            
+            if (goToExams) {
+                goToExams.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert("📋 Navigating to Exams Portal — Here you can view and download all your assessments.");
+                });
+            }
+            if (goToLibrary) {
+                goToLibrary.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert("📚 Opening E-Book Store — Access digital textbooks, revision notes, and past papers.");
+                });
+            }
+            if (goToClasses) {
+                goToClasses.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert("🎥 Redirecting to My Classes — Continue watching recorded lectures and live sessions.");
+                });
+            }
+            if (downloadResources) {
+                downloadResources.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert("📎 Download Study Materials — Get revision guides, flashcards, and practice sheets.");
+                });
+            }
+        }
+
+        // Simulate loading data and initializing dashboard
+        function initDashboard() {
+            renderCourses();
+            renderExams();
+            renderActivity();
+            initPerformanceChart();
+            updateStats();
+            setupQuickActions();
+        }
+
+        // Run when DOM ready
+        document.addEventListener('DOMContentLoaded', initDashboard);
+        
+        // Handle window resize for chart responsiveness
+        window.addEventListener('resize', () => {
+            if (performanceChart) {
+                performanceChart.resize();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Academy · video classes</title>
-    <!-- JS file for all logic -->
-    <link href="ECOMEY.JS">
+    <title>ECOEMY · Video Classes | Nexus Academy</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -55,6 +53,7 @@
             border-radius: 60px;
             box-shadow: var(--glass-shadow);
             transition: all 0.3s ease;
+            flex-wrap: wrap;
         }
 
         .logo h2 {
@@ -105,14 +104,11 @@
             border: 1px solid rgba(255, 215, 100, 0.8) !important;
             color: #0a0a14 !important;
             font-weight: 700 !important;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 4px 12px rgba(255, 200, 50, 0.3);
         }
 
-        .btn-enroll:hover {
-            background: rgba(255, 180, 40, 0.85) !important;
-            border-color: #ffcf7a !important;
-            color: #000 !important;
+        .btn-special {
+            background: rgba(242, 169, 0, 0.5);
+            border: 1px solid rgba(255, 215, 100, 0.6);
         }
 
         /* ===== MAIN CONTENT ===== */
@@ -124,7 +120,7 @@
             padding: 1.5rem 1.5rem 2rem 1.5rem;
         }
 
-        /* welcome banner (same as dashboard) */
+        /* welcome banner */
         .welcome-banner {
             width: 100%;
             margin: 0 auto 2rem auto;
@@ -163,7 +159,6 @@
             margin: 0;
         }
 
-        /* section title */
         .section-title {
             font-size: 2rem;
             font-weight: 600;
@@ -183,7 +178,6 @@
             color: #ffdf9e;
         }
 
-        /* video grid - YouTube style */
         .videos-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -191,7 +185,6 @@
             margin-bottom: 3rem;
         }
 
-        /* video card (glass + YouTube aesthetic) */
         .video-card {
             background: var(--glass-bg);
             backdrop-filter: var(--backdrop-blur);
@@ -212,7 +205,6 @@
             box-shadow: 0 25px 40px -15px #000, 0 0 0 2px rgba(255,210,90,0.2) inset;
         }
 
-        /* thumbnail container */
         .video-thumbnail {
             position: relative;
             width: 100%;
@@ -232,14 +224,13 @@
             transform: scale(1.05);
         }
 
-        /* play button overlay */
         .play-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -270,7 +261,6 @@
             transform: scale(1);
         }
 
-        /* duration badge */
         .duration-badge {
             position: absolute;
             bottom: 8px;
@@ -286,7 +276,6 @@
             z-index: 2;
         }
 
-        /* video info */
         .video-info {
             padding: 1.2rem;
             flex: 1;
@@ -334,6 +323,7 @@
             font-size: 0.8rem;
             color: rgba(255,255,240,0.6);
             margin-bottom: 0.8rem;
+            flex-wrap: wrap;
         }
 
         .video-stats i {
@@ -376,6 +366,7 @@
             align-items: center;
             justify-content: center;
             gap: 0.4rem;
+            cursor: pointer;
         }
 
         .btn-watch {
@@ -401,15 +392,6 @@
             border-color: rgba(255,255,255,0.4);
         }
 
-        /* quick actions */
-        .quick-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 2rem;
-        }
-
-        /* ===== FOOTER ===== */
         footer {
             max-width: 1300px;
             width: 95%;
@@ -426,7 +408,6 @@
             box-shadow: 0 -5px 30px rgba(0,0,0,0.3);
         }
 
-        /* floating orbs */
         #orb1 {
             position: fixed;
             bottom: 20px;
@@ -450,7 +431,6 @@
             z-index: -1;
         }
 
-        /* responsive */
         @media (max-width: 700px) {
             nav {
                 flex-direction: column;
@@ -467,38 +447,32 @@
     </style>
 </head>
 <body>
-    <!-- floating orbs -->
     <div id="orb1"></div>
     <div id="orb2"></div>
 
-    <!-- navigation -->
     <nav>
-        <div class="logo">
-            <h2>ECO<span>EMY</span></h2>
-        </div>
+        <div class="logo"><h2>ECO<span>EMY</span></h2></div>
         <div class="nav-links">
-            <a href="index.html"><i class="fas fa-home" style="margin-right: 6px;"></i>Home</a>
-            <a href="classes.html" style="background: rgba(255,255,255,0.15);"><i class="fas fa-chalkboard-teacher"></i> My Classes</a>
-            <a href="library.html"><i class="fas fa-book" style="margin-right: 6px;"></i>E-Book Store</a>
-            <a href="enroll.html" class="btn-enroll"><i class="fas fa-gem" style="margin-right: 6px;"></i>Enroll Now</a>
+            <a href="STu.exam.html"><i class="fas fa-file-alt"></i> My Exams</a>
+            <a href="Rosouresstoey.html"><i class="fas fa-book"></i> Resources Shop</a>
+            <a href="Rosoures.html"><i class="fas fa-book-open"></i> Resources</a>
+            <a href="classes.html"><i class="fas fa-chalkboard-teacher"></i> Classes</a>
+            <a href="Dashboard.html"><i class="fas fa-user-graduate"></i> Profile</a>
         </div>
     </nav>
 
-    <!-- main content -->
     <div class="main-content">
-        <!-- welcome banner -->
         <div class="welcome-banner">
             <h1><i class="fas fa-play-circle" style="margin-right: 15px;"></i>My Video Classes</h1>
-            <p><i class="fas fa-calendar-alt" style="margin-right: 8px;"></i>Spring Semester 2026 · 4 courses · 24 lectures</p>
+            <p><i class="fas fa-calendar-alt" style="margin-right: 8px;"></i>Spring Semester 2026 · 6 courses · 32 lectures</p>
         </div>
 
-        <!-- video classes section -->
         <div class="section-title">
             <i class="fas fa-video"></i> Continue Watching
         </div>
 
         <div class="videos-grid">
-            <!-- video card 1 - Business Strategy -->
+            <!-- Video 1 - Business Strategy -->
             <div class="video-card">
                 <div class="video-thumbnail">
                     <img src="https://img.youtube.com/vi/9kuzRGS2VKY/0.jpg" alt="Business Strategy thumbnail">
@@ -508,28 +482,22 @@
                     <span class="duration-badge"><i class="far fa-clock"></i> 32:15</span>
                 </div>
                 <div class="video-info">
-                    <div class="video-meta">
-                        <span class="class-code">BUS-501</span>
-                    </div>
+                    <div class="video-meta"><span class="class-code">BUS-501</span></div>
                     <div class="video-title">Business Strategy: Competitive Advantage</div>
-                    <div class="video-instructor">
-                        <i class="fas fa-user-tie"></i> Dr. Sarah Mitchell
-                    </div>
+                    <div class="video-instructor"><i class="fas fa-user-tie"></i> Dr. Sarah Mitchell</div>
                     <div class="video-stats">
                         <span><i class="fas fa-eye"></i> 2.4k views</span>
                         <span><i class="fas fa-calendar"></i> Updated 2 days ago</span>
                     </div>
-                    <div class="progress-mini">
-                        <div class="progress-mini-fill" style="width: 68%;"></div>
-                    </div>
+                    <div class="progress-mini"><div class="progress-mini-fill" style="width: 68%;"></div></div>
                     <div class="video-actions">
-                        <a href="#" class="btn-watch"><i class="fas fa-play"></i> Watch Now</a>
+                        <a href="#" class="btn-watch" data-video="https://www.youtube.com/embed/9kuzRGS2VKY"><i class="fas fa-play"></i> Watch Now</a>
                         <a href="#" class="btn-materials"><i class="fas fa-file-alt"></i> Notes</a>
                     </div>
                 </div>
             </div>
 
-            <!-- video card 2 - Financial Accounting -->
+            <!-- Video 2 - Financial Accounting -->
             <div class="video-card">
                 <div class="video-thumbnail">
                     <img src="https://img.youtube.com/vi/d5Y6fLkz_l0/0.jpg" alt="Financial Accounting thumbnail">
@@ -539,28 +507,22 @@
                     <span class="duration-badge"><i class="far fa-clock"></i> 45:22</span>
                 </div>
                 <div class="video-info">
-                    <div class="video-meta">
-                        <span class="class-code">ACC-302</span>
-                    </div>
+                    <div class="video-meta"><span class="class-code">ACC-302</span></div>
                     <div class="video-title">Financial Statements & Ratio Analysis</div>
-                    <div class="video-instructor">
-                        <i class="fas fa-user-tie"></i> Prof. James Chen
-                    </div>
+                    <div class="video-instructor"><i class="fas fa-user-tie"></i> Prof. James Chen</div>
                     <div class="video-stats">
                         <span><i class="fas fa-eye"></i> 1.8k views</span>
                         <span><i class="fas fa-calendar"></i> Updated 5 days ago</span>
                     </div>
-                    <div class="progress-mini">
-                        <div class="progress-mini-fill" style="width: 42%;"></div>
-                    </div>
+                    <div class="progress-mini"><div class="progress-mini-fill" style="width: 42%;"></div></div>
                     <div class="video-actions">
-                        <a href="#" class="btn-watch"><i class="fas fa-play"></i> Watch Now</a>
+                        <a href="#" class="btn-watch" data-video="https://www.youtube.com/embed/d5Y6fLkz_l0"><i class="fas fa-play"></i> Watch Now</a>
                         <a href="#" class="btn-materials"><i class="fas fa-file-alt"></i> Notes</a>
                     </div>
                 </div>
             </div>
 
-            <!-- video card 3 - Macroeconomics -->
+            <!-- Video 3 - Macroeconomics -->
             <div class="video-card">
                 <div class="video-thumbnail">
                     <img src="https://img.youtube.com/vi/8ssSMholdt8/0.jpg" alt="Macroeconomics thumbnail">
@@ -570,28 +532,22 @@
                     <span class="duration-badge"><i class="far fa-clock"></i> 51:33</span>
                 </div>
                 <div class="video-info">
-                    <div class="video-meta">
-                        <span class="class-code">ECO-401</span>
-                    </div>
+                    <div class="video-meta"><span class="class-code">ECO-401</span></div>
                     <div class="video-title">Advanced Macroeconomics: Fiscal Policy</div>
-                    <div class="video-instructor">
-                        <i class="fas fa-user-tie"></i> Dr. Emily Rodriguez
-                    </div>
+                    <div class="video-instructor"><i class="fas fa-user-tie"></i> Dr. Emily Rodriguez</div>
                     <div class="video-stats">
                         <span><i class="fas fa-eye"></i> 3.1k views</span>
                         <span><i class="fas fa-calendar"></i> Updated 1 week ago</span>
                     </div>
-                    <div class="progress-mini">
-                        <div class="progress-mini-fill" style="width: 25%;"></div>
-                    </div>
+                    <div class="progress-mini"><div class="progress-mini-fill" style="width: 25%;"></div></div>
                     <div class="video-actions">
-                        <a href="#" class="btn-watch"><i class="fas fa-play"></i> Watch Now</a>
+                        <a href="#" class="btn-watch" data-video="https://www.youtube.com/embed/8ssSMholdt8"><i class="fas fa-play"></i> Watch Now</a>
                         <a href="#" class="btn-materials"><i class="fas fa-file-alt"></i> Notes</a>
                     </div>
                 </div>
             </div>
 
-            <!-- video card 4 - Corporate Governance -->
+            <!-- Video 4 - Corporate Governance -->
             <div class="video-card">
                 <div class="video-thumbnail">
                     <img src="https://img.youtube.com/vi/tVX9npuCO7Y/0.jpg" alt="Corporate Governance thumbnail">
@@ -601,28 +557,22 @@
                     <span class="duration-badge"><i class="far fa-clock"></i> 38:47</span>
                 </div>
                 <div class="video-info">
-                    <div class="video-meta">
-                        <span class="class-code">BUS-403</span>
-                    </div>
+                    <div class="video-meta"><span class="class-code">BUS-403</span></div>
                     <div class="video-title">Corporate Governance: Board Structure</div>
-                    <div class="video-instructor">
-                        <i class="fas fa-user-tie"></i> Prof. Michael Wong
-                    </div>
+                    <div class="video-instructor"><i class="fas fa-user-tie"></i> Prof. Michael Wong</div>
                     <div class="video-stats">
                         <span><i class="fas fa-eye"></i> 1.2k views</span>
                         <span><i class="fas fa-calendar"></i> Updated 3 days ago</span>
                     </div>
-                    <div class="progress-mini">
-                        <div class="progress-mini-fill" style="width: 57%;"></div>
-                    </div>
+                    <div class="progress-mini"><div class="progress-mini-fill" style="width: 57%;"></div></div>
                     <div class="video-actions">
-                        <a href="#" class="btn-watch"><i class="fas fa-play"></i> Watch Now</a>
+                        <a href="#" class="btn-watch" data-video="https://www.youtube.com/embed/tVX9npuCO7Y"><i class="fas fa-play"></i> Watch Now</a>
                         <a href="#" class="btn-materials"><i class="fas fa-file-alt"></i> Notes</a>
                     </div>
                 </div>
             </div>
 
-            <!-- video card 5 - Marketing (extra) -->
+            <!-- Video 5 - Digital Marketing -->
             <div class="video-card">
                 <div class="video-thumbnail">
                     <img src="https://img.youtube.com/vi/szoVX5WqvZA/0.jpg" alt="Marketing thumbnail">
@@ -632,28 +582,22 @@
                     <span class="duration-badge"><i class="far fa-clock"></i> 29:18</span>
                 </div>
                 <div class="video-info">
-                    <div class="video-meta">
-                        <span class="class-code">MKT-201</span>
-                    </div>
+                    <div class="video-meta"><span class="class-code">MKT-201</span></div>
                     <div class="video-title">Digital Marketing Strategy Fundamentals</div>
-                    <div class="video-instructor">
-                        <i class="fas fa-user-tie"></i> Prof. Lisa Thompson
-                    </div>
+                    <div class="video-instructor"><i class="fas fa-user-tie"></i> Prof. Lisa Thompson</div>
                     <div class="video-stats">
                         <span><i class="fas fa-eye"></i> 4.2k views</span>
                         <span><i class="fas fa-calendar"></i> Updated 4 days ago</span>
                     </div>
-                    <div class="progress-mini">
-                        <div class="progress-mini-fill" style="width: 15%;"></div>
-                    </div>
+                    <div class="progress-mini"><div class="progress-mini-fill" style="width: 15%;"></div></div>
                     <div class="video-actions">
-                        <a href="#" class="btn-watch"><i class="fas fa-play"></i> Watch Now</a>
+                        <a href="#" class="btn-watch" data-video="https://www.youtube.com/embed/szoVX5WqvZA"><i class="fas fa-play"></i> Watch Now</a>
                         <a href="#" class="btn-materials"><i class="fas fa-file-alt"></i> Notes</a>
                     </div>
                 </div>
             </div>
 
-            <!-- video card 6 - Entrepreneurship -->
+            <!-- Video 6 - Entrepreneurship -->
             <div class="video-card">
                 <div class="video-thumbnail">
                     <img src="https://img.youtube.com/vi/HHwI7yqJ5fA/0.jpg" alt="Entrepreneurship thumbnail">
@@ -663,22 +607,16 @@
                     <span class="duration-badge"><i class="far fa-clock"></i> 42:05</span>
                 </div>
                 <div class="video-info">
-                    <div class="video-meta">
-                        <span class="class-code">ENT-301</span>
-                    </div>
+                    <div class="video-meta"><span class="class-code">ENT-301</span></div>
                     <div class="video-title">Lean Startup & Business Model Canvas</div>
-                    <div class="video-instructor">
-                        <i class="fas fa-user-tie"></i> Dr. Robert Garcia
-                    </div>
+                    <div class="video-instructor"><i class="fas fa-user-tie"></i> Dr. Robert Garcia</div>
                     <div class="video-stats">
                         <span><i class="fas fa-eye"></i> 2.8k views</span>
                         <span><i class="fas fa-calendar"></i> Updated 6 days ago</span>
                     </div>
-                    <div class="progress-mini">
-                        <div class="progress-mini-fill" style="width: 33%;"></div>
-                    </div>
+                    <div class="progress-mini"><div class="progress-mini-fill" style="width: 33%;"></div></div>
                     <div class="video-actions">
-                        <a href="#" class="btn-watch"><i class="fas fa-play"></i> Watch Now</a>
+                        <a href="#" class="btn-watch" data-video="https://www.youtube.com/embed/HHwI7yqJ5fA"><i class="fas fa-play"></i> Watch Now</a>
                         <a href="#" class="btn-materials"><i class="fas fa-file-alt"></i> Notes</a>
                     </div>
                 </div>
@@ -686,10 +624,125 @@
         </div>
     </div>
 
-    <!-- FOOTER – exactly as requested (text unchanged) -->
     <footer>
         <p style="opacity: 0.9; letter-spacing: 0.5px;">© 2026 ECOEMY Software System . Online</p>
     </footer>
 
+    <!-- Video Modal for YouTube playback -->
+    <div id="videoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; backdrop-filter: blur(10px); align-items: center; justify-content: center; flex-direction: column;">
+        <div style="position: relative; width: 90%; max-width: 1000px; background: #000; border-radius: 24px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.5);">
+            <button id="closeModalBtn" style="position: absolute; top: 15px; right: 20px; background: rgba(0,0,0,0.7); border: none; color: white; font-size: 28px; cursor: pointer; z-index: 10; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">&times;</button>
+            <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+                <iframe id="videoFrame" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fix all broken navigation links and add video modal functionality
+        (function() {
+            // Get all watch buttons
+            const watchButtons = document.querySelectorAll('.btn-watch');
+            const modal = document.getElementById('videoModal');
+            const videoFrame = document.getElementById('videoFrame');
+            const closeBtn = document.getElementById('closeModalBtn');
+            
+            // Function to open video modal
+            function openVideo(videoUrl) {
+                if (!modal || !videoFrame) return;
+                // Ensure embed URL works (if it's a youtube watch URL, convert to embed)
+                let embedUrl = videoUrl;
+                if (videoUrl.includes('youtube.com/watch?v=')) {
+                    const videoId = videoUrl.split('v=')[1]?.split('&')[0];
+                    if (videoId) embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                } else if (videoUrl.includes('youtu.be/')) {
+                    const videoId = videoUrl.split('youtu.be/')[1]?.split('?')[0];
+                    if (videoId) embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                }
+                videoFrame.src = embedUrl;
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Close modal function
+            function closeModal() {
+                if (modal) {
+                    modal.style.display = 'none';
+                    if (videoFrame) videoFrame.src = '';
+                    document.body.style.overflow = '';
+                }
+            }
+            
+            // Add click handlers to watch buttons
+            if (watchButtons.length) {
+                watchButtons.forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const videoUrl = this.getAttribute('data-video');
+                        if (videoUrl) {
+                            openVideo(videoUrl);
+                        } else {
+                            // Fallback: show alert that video would play
+                            const videoTitle = this.closest('.video-card')?.querySelector('.video-title')?.innerText || 'Video';
+                            alert(`🎬 Playing: ${videoTitle}\n(This would open the video player. In production, YouTube embed would appear.)`);
+                        }
+                    });
+                });
+            }
+            
+            // Close modal on button click
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeModal);
+            }
+            
+            // Close modal on background click
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) closeModal();
+                });
+            }
+            
+            // Close on ESC key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal && modal.style.display === 'flex') {
+                    closeModal();
+                }
+            });
+            
+            // Fix any missing hrefs for materials buttons (show demo alert)
+            const materialsBtns = document.querySelectorAll('.btn-materials');
+            materialsBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const courseName = this.closest('.video-card')?.querySelector('.video-title')?.innerText || 'this course';
+                    alert(`📄 Course materials for "${courseName}" would open here.\nIncludes: lecture slides, reading list, and practice quiz.`);
+                });
+            });
+            
+            // Fix any broken navigation links that might have invalid hrefs
+            const allNavLinks = document.querySelectorAll('.nav-links a');
+            allNavLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && (href === '#' || href === '' || href === 'javascript:void(0)')) {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const linkText = this.innerText.trim();
+                        alert(`🔗 Navigation: ${linkText}\nThis would take you to the ${linkText} page in the full system.`);
+                    });
+                }
+            });
+            
+            // Fix logo click
+            const logo = document.querySelector('.logo');
+            if (logo) {
+                logo.style.cursor = 'pointer';
+                logo.addEventListener('click', () => {
+                    alert('🏠 ECOEMY Home\nWould navigate to dashboard in production.');
+                });
+            }
+            
+            console.log('Video classes page fixed and ready!');
+        })();
+    </script>
 </body>
 </html>

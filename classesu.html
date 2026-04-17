@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ECOEMY · My Classes (Teacher Dashboard)</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* LIQUID GLASS VARIABLES */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.18);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
+            --backdrop-blur: blur(12px) saturate(180%);
+            --text-light: #f2f2f2;
+            --deep-bg-start: #0b0f1c;
+            --deep-bg-end: #19233f;
+            --gold-accent: #ffd966;
+            --success-green: #4caf50;
+            --info-blue: #2196f3;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(145deg, var(--deep-bg-start), var(--deep-bg-end));
+            min-height: 100vh;
+            color: var(--text-light);
+            backdrop-filter: blur(2px);
+            margin: 0;
+            line-height: 1.5;
+            padding-bottom: 3rem;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        /* === GLASS NAVIGATION === */
+        nav {
+            position: sticky;
+            top: 1.2rem;
+            z-index: 1000;
+            max-width: 1400px;
+            margin: 0 auto 1rem auto;
+            width: 95%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 2rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 60px;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .logo h2 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            background: linear-gradient(130deg, #ffffff, #ffe6b0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo span { font-weight: 300; }
+
+        .nav-links {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.3);
+        }
+        .btn-special {
+            background: rgba(242, 169, 0, 0.75) !important;
+            border: 1px solid rgba(255, 215, 100, 0.9) !important;
+            color: #0a0a14 !important;
+            font-weight: 700 !important;
+        }
+
+        /* MAIN CONTAINER */
+        .classes-container {
+            max-width: 1400px;
+            width: 95%;
+            margin: 1.5rem auto;
+        }
+
+        /* Header Section */
+        .page-header {
+            background: var(--glass-bg);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 48px;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .header-text h1 {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-text h1 i {
+            color: var(--gold-accent);
+        }
+        .header-text p {
+            color: rgba(255,255,240,0.8);
+            margin-top: 0.3rem;
+        }
+        .create-class-btn {
+            background: rgba(242, 169, 0, 0.85);
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .create-class-btn:hover {
+            background: #f3cf8a;
+            transform: scale(1.02);
+        }
+
+        /* Classes Grid */
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+        .class-card {
+            background: rgba(25, 30, 50, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            border: 1px solid rgba(255,215,100,0.3);
+            padding: 1.5rem;
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+        .class-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-accent);
+            background: rgba(45, 50, 75, 0.7);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.4);
+        }
+        .class-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .class-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffecb3;
+        }
+        .class-code {
+            background: rgba(0,0,0,0.4);
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-family: monospace;
+        }
+        .class-info {
+            margin: 0.8rem 0;
+        }
+        .class-info p {
+            font-size: 0.85rem;
+            color: rgba(255,255,240,0.8);
+            margin: 0.3rem 0;
+        }
+        .class-stats {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 0.5rem 0;
+            border-top: 1px solid rgba(255,215,100,0.2);
+            border-bottom: 1px solid rgba(255,215,100,0.2);
+        }
+        .stat-badge {
+            background: rgba(255,255,255,0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+        }
+        .class-actions {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        .class-btn {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem;
+            border-radius: 40px;
+            text-align: center;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .class-btn:hover {
+            background: rgba(242, 169, 0, 0.5);
+            border-color: var(--gold-accent);
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(16px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.2s;
+        }
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: rgba(20, 25, 45, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,215,100,0.5);
+            border-radius: 48px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gold-accent);
+        }
+        .modal h2 {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        .form-control {
+            width: 100%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            padding: 0.8rem 1.2rem;
+            color: white;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--gold-accent);
+        }
+        .btn-submit {
+            background: rgba(242, 169, 0, 0.85);
+            border: none;
+            padding: 0.8rem;
+            border-radius: 60px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        /* Students List inside Modal */
+        .students-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            margin-bottom: 0.5rem;
+        }
+        .remove-student {
+            background: none;
+            border: none;
+            color: #ffa27a;
+            cursor: pointer;
+        }
+
+        /* Floating Orbs */
+        #orb-bottom, #orb-top {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        #orb-bottom { bottom: 20px; left: 20px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,215,150,0.12) 0%, transparent 80%);}
+        #orb-top { top: 100px; right: 20px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(150,200,255,0.1) 0%, transparent 80%);}
+
+        footer {
+            max-width: 1400px;
+            width: 95%;
+            margin: 2rem auto 0;
+            padding: 1.5rem;
+            background: rgba(20,25,45,0.45);
+            backdrop-filter: blur(14px);
+            border-radius: 60px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 48px;
+            color: rgba(255,255,240,0.6);
+        }
+
+        @media (max-width: 768px) {
+            .page-header { flex-direction: column; gap: 1rem; text-align: center; }
+            .classes-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="orb-bottom"></div>
+    <div id="orb-top"></div>
+
+     <!-- floating orbs -->
+    <div id="orb1"></div>
+    <div id="orb2"></div>
+
+    <!-- navigation -->
+    <nav>
+        <div class="logo">
+            <h2>ECO<span>EMY</span></h2>
+        </div>
+        <div class="nav-links">
+            <a href="classesu.html"><i class="fas fa-chalkboard-teacher"></i> My Classes</a>
+            <a href="library.html"><i class="fas fa-book" style="margin-right: 6px;"></i>E-Book Store</a>
+            <a href="Exam.html" style="background: rgba(255,255,255,0.15);"><i class="fas fa-gem"></i> Exam Maker</a>
+            
+        </div>
+    </nav>
+
+    <main class="classes-container">
+        <div class="page-header">
+            <div class="header-text">
+                <h1><i class="fas fa-chalkboard-teacher"></i> My Classes</h1>
+                <p>Manage your courses, track attendance, and engage with students</p>
+            </div>
+            <button class="create-class-btn" id="createClassBtn"><i class="fas fa-plus-circle"></i> Create New Class</button>
+        </div>
+
+        <div id="classesGrid" class="classes-grid"></div>
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <i class="fas fa-school" style="font-size: 3rem; opacity: 0.5;"></i>
+            <h3>No classes yet</h3>
+            <p>Click "Create New Class" to start teaching</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 ECOEMY Teacher Portal — Manage your virtual classroom</p>
+    </footer>
+
+    <!-- Create Class Modal -->
+    <div id="classModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeModalBtn">&times;</span>
+            <h2><i class="fas fa-plus-circle"></i> Create New Class</h2>
+            <form id="createClassForm">
+                <div class="form-group">
+                    <label>Class Name *</label>
+                    <input type="text" class="form-control" id="className" placeholder="e.g., A-Level Economics - Section A" required>
+                </div>
+                <div class="form-group">
+                    <label>Subject *</label>
+                    <input type="text" class="form-control" id="classSubject" placeholder="e.g., Economics, Business, Mathematics" required>
+                </div>
+                <div class="form-group">
+                    <label>Level</label>
+                    <select class="form-control" id="classLevel">
+                        <option value="IGCSE">IGCSE</option>
+                        <option value="A-Level" selected>A-Level</option>
+                        <option value="BTEC">BTEC</option>
+                        <option value="GCSE">GCSE</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Schedule (optional)</label>
+                    <input type="text" class="form-control" id="classSchedule" placeholder="e.g., Mon/Wed 10:00 AM">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" id="classDescription" rows="2" placeholder="Course overview..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit"><i class="fas fa-check"></i> Create Class</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Class Details Modal (View Students, Manage) -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeDetailsBtn">&times;</span>
+            <h2 id="detailsModalTitle"><i class="fas fa-users"></i> Class Details</h2>
+            <div id="detailsContent"></div>
+            <div class="form-group" style="margin-top: 1rem;">
+                <label><i class="fas fa-user-plus"></i> Add Student (by email)</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" class="form-control" id="studentEmail" placeholder="student@example.com">
+                    <button id="addStudentBtn" class="btn-submit" style="width: auto; padding: 0 1.5rem;">Add</button>
+                </div>
+            </div>
+            <button id="closeDetailsModalBtn" class="btn-submit" style="background: rgba(255,255,255,0.2); margin-top: 1rem;">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // ---------- CLASSES DATA ----------
+        let teacherClasses = [];
+
+        // Load from localStorage
+        function loadClasses() {
+            const stored = localStorage.getItem('ecoemy_teacher_classes');
+            if (stored) {
+                teacherClasses = JSON.parse(stored);
+            } else {
+                // Sample demo classes
+                teacherClasses = [
+                    {
+                        id: "class_1",
+                        name: "A-Level Economics",
+                        subject: "Economics",
+                        level: "A-Level",
+                        schedule: "Monday & Wednesday, 10:00 AM",
+                        description: "Complete A-Level Economics syllabus covering micro and macroeconomics",
+                        students: [
+                            { id: "s1", name: "Alex Johnson", email: "alex@example.com", joinedDate: "2026-03-01" },
+                            { id: "s2", name: "Sarah Williams", email: "sarah@example.com", joinedDate: "2026-03-02" },
+                            { id: "s3", name: "Michael Brown", email: "michael@example.com", joinedDate: "2026-03-05" }
+                        ],
+                        createdAt: "2026-02-15"
+                    },
+                    {
+                        id: "class_2",
+                        name: "Business Management",
+                        subject: "Business",
+                        level: "A-Level",
+                        schedule: "Tuesday & Thursday, 2:00 PM",
+                        description: "Leadership, marketing, finance, and strategic management",
+                        students: [
+                            { id: "s4", name: "Emily Davis", email: "emily@example.com", joinedDate: "2026-03-10" },
+                            { id: "s5", name: "James Wilson", email: "james@example.com", joinedDate: "2026-03-12" }
+                        ],
+                        createdAt: "2026-02-20"
+                    },
+                    {
+                        id: "class_3",
+                        name: "IGCSE Mathematics",
+                        subject: "Mathematics",
+                        level: "IGCSE",
+                        schedule: "Monday & Friday, 1:00 PM",
+                        description: "Algebra, geometry, statistics, and calculus fundamentals",
+                        students: [
+                            { id: "s6", name: "Olivia Martinez", email: "olivia@example.com", joinedDate: "2026-03-08" }
+                        ],
+                        createdAt: "2026-03-01"
+                    }
+                ];
+                saveClasses();
+            }
+            renderClasses();
+        }
+
+        function saveClasses() {
+            localStorage.setItem('ecoemy_teacher_classes', JSON.stringify(teacherClasses));
+        }
+
+        // Helper functions
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        function generateId() {
+            return 'class_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+        }
+
+        // Render classes grid
+        function renderClasses() {
+            const container = document.getElementById('classesGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (teacherClasses.length === 0) {
+                container.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            emptyState.style.display = 'none';
+            container.innerHTML = '';
+            
+            teacherClasses.forEach(cls => {
+                const card = document.createElement('div');
+                card.className = 'class-card';
+                card.innerHTML = `
+                    <div class="class-header">
+                        <div class="class-title">${escapeHtml(cls.name)}</div>
+                        <div class="class-code">${cls.id.slice(-6)}</div>
+                    </div>
+                    <div class="class-info">
+                        <p><i class="fas fa-book"></i> ${escapeHtml(cls.subject)} · ${escapeHtml(cls.level)}</p>
+                        <p><i class="far fa-calendar-alt"></i> ${escapeHtml(cls.schedule || 'TBA')}</p>
+                        <p><i class="fas fa-users"></i> ${cls.students.length} students enrolled</p>
+                    </div>
+                    <div class="class-stats">
+                        <span class="stat-badge"><i class="fas fa-chart-line"></i> 78% avg attendance</span>
+                        <span class="stat-badge"><i class="fas fa-star"></i> 4.8 rating</span>
+                    </div>
+                    <div class="class-actions">
+                        <button class="class-btn view-students" data-id="${cls.id}"><i class="fas fa-users"></i> Students</button>
+                        <button class="class-btn upload-material" data-id="${cls.id}"><i class="fas fa-upload"></i> Materials</button>
+                        <button class="class-btn delete-class" data-id="${cls.id}"><i class="fas fa-trash"></i> Delete</button>
+                    </div>
+                `;
+                
+                const viewBtn = card.querySelector('.view-students');
+                const uploadBtn = card.querySelector('.upload-material');
+                const deleteBtn = card.querySelector('.delete-class');
+                
+                viewBtn.addEventListener('click', () => openClassDetails(cls.id));
+                uploadBtn.addEventListener('click', () => openUploadMaterials(cls.id));
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (confirm(`Delete class "${cls.name}"? This action cannot be undone.`)) {
+                        teacherClasses = teacherClasses.filter(c => c.id !== cls.id);
+                        saveClasses();
+                        renderClasses();
+                        showToast(`Class "${cls.name}" deleted`, "info");
+                    }
+                });
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Create new class
+        function createClass(event) {
+            event.preventDefault();
+            const name = document.getElementById('className').value.trim();
+            const subject = document.getElementById('classSubject').value.trim();
+            const level = document.getElementById('classLevel').value;
+            const schedule = document.getElementById('classSchedule').value;
+            const description = document.getElementById('classDescription').value;
+            
+            if (!name || !subject) {
+                showToast("Please fill in class name and subject", "info");
+                return;
+            }
+            
+            const newClass = {
+                id: generateId(),
+                name: name,
+                subject: subject,
+                level: level,
+                schedule: schedule,
+                description: description,
+                students: [],
+                createdAt: new Date().toISOString().split('T')[0]
+            };
+            
+            teacherClasses.push(newClass);
+            saveClasses();
+            renderClasses();
+            closeModal('classModal');
+            document.getElementById('createClassForm').reset();
+            showToast(`Class "${name}" created successfully!`, "success");
+        }
+
+        // Open class details modal
+        let currentClassId = null;
+        
+        function openClassDetails(classId) {
+            const cls = teacherClasses.find(c => c.id === classId);
+            if (!cls) return;
+            currentClassId = classId;
+            
+            const modal = document.getElementById('detailsModal');
+            const modalTitle = document.getElementById('detailsModalTitle');
+            const detailsContent = document.getElementById('detailsContent');
+            
+            modalTitle.innerHTML = `<i class="fas fa-chalkboard"></i> ${escapeHtml(cls.name)} - Students (${cls.students.length})`;
+            
+            let studentsHtml = `<div class="students-list">`;
+            if (cls.students.length === 0) {
+                studentsHtml += `<p style="text-align: center; padding: 1rem;">No students enrolled yet. Add students using the form below.</p>`;
+            } else {
+                cls.students.forEach(student => {
+                    studentsHtml += `
+                        <div class="student-item">
+                            <div>
+                                <strong>${escapeHtml(student.name)}</strong><br>
+                                <small>${escapeHtml(student.email)} · Joined: ${student.joinedDate}</small>
+                            </div>
+                            <button class="remove-student" data-email="${escapeHtml(student.email)}"><i class="fas fa-user-minus"></i></button>
+                        </div>
+                    `;
+                });
+            }
+            studentsHtml += `</div>`;
+            detailsContent.innerHTML = studentsHtml;
+            
+            // Attach remove student handlers
+            setTimeout(() => {
+                document.querySelectorAll('.remove-student').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const email = btn.getAttribute('data-email');
+                        removeStudentFromClass(classId, email);
+                    });
+                });
+            }, 100);
+            
+            modal.classList.add('active');
+        }
+        
+        function removeStudentFromClass(classId, email) {
+            const cls = teacherClasses.find(c => c.id === classId);
+            if (cls) {
+                cls.students = cls.students.filter(s => s.email !== email);
+                saveClasses();
+                openClassDetails(classId); // refresh modal
+                showToast("Student removed from class", "info");
+            }
+        }
+        
+        function addStudentToClass() {
+            const emailInput = document.getElementById('studentEmail');
+            const email = emailInput.value.trim();
+            if (!email) {
+                showToast("Please enter student email", "info");
+                return;
+            }
+            const cls = teacherClasses.find(c => c.id === currentClassId);
+            if (cls) {
+                // Check if already enrolled
+                if (cls.students.some(s => s.email === email)) {
+                    showToast("Student already enrolled", "info");
+                    return;
+                }
+                const name = email.split('@')[0]; // simple name from email
+                cls.students.push({
+                    id: 'stu_' + Date.now(),
+                    name: name.charAt(0).toUpperCase() + name.slice(1),
+                    email: email,
+                    joinedDate: new Date().toISOString().split('T')[0]
+                });
+                saveClasses();
+                emailInput.value = '';
+                openClassDetails(currentClassId);
+                showToast(`Student added to class`, "success");
+            }
+        }
+        
+        function openUploadMaterials(classId) {
+            const cls = teacherClasses.find(c => c.id === classId);
+            if (cls) {
+                alert(`📚 Upload Materials for "${cls.name}"\n\nYou can now upload:\n- Lecture notes\n- Assignments\n- Past papers\n- Video links\n\n(Full material management coming soon!)`);
+            }
+        }
+        
+        // Modal management
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // Toast notification
+        function showToast(message, type = "success") {
+            const toast = document.createElement('div');
+            toast.style.position = 'fixed';
+            toast.style.bottom = '30px';
+            toast.style.right = '30px';
+            toast.style.background = 'rgba(0,0,0,0.85)';
+            toast.style.backdropFilter = 'blur(12px)';
+            toast.style.border = '1px solid var(--gold-accent)';
+            toast.style.borderRadius = '60px';
+            toast.style.padding = '0.8rem 1.5rem';
+            toast.style.color = '#fff';
+            toast.style.zIndex = '3000';
+            toast.style.fontSize = '0.9rem';
+            toast.style.display = 'flex';
+            toast.style.alignItems = 'center';
+            toast.style.gap = '10px';
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-info-circle'}" style="color: var(--gold-accent);"></i> ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        // Event Listeners
+        document.getElementById('createClassBtn').addEventListener('click', () => openModal('classModal'));
+        document.getElementById('closeModalBtn').addEventListener('click', () => closeModal('classModal'));
+        document.getElementById('closeDetailsBtn').addEventListener('click', () => closeModal('detailsModal'));
+        document.getElementById('closeDetailsModalBtn').addEventListener('click', () => closeModal('detailsModal'));
+        document.getElementById('createClassForm').addEventListener('submit', createClass);
+        document.getElementById('addStudentBtn').addEventListener('click', addStudentToClass);
+        
+        // Close modals on outside click
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+        
+        // Initialize
+        loadClasses();
+    </script>
+</body>
+</html>

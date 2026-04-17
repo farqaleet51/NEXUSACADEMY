@@ -1,0 +1,730 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ECOEMY · Role-Based Login</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* liquid glass variables matching ECOEMY style */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
+            --backdrop-blur: blur(14px) saturate(200%);
+            --accent-glow: rgba(255, 200, 70, 0.8);
+            --text-light: #f2f2f2;
+            --deep-bg-start: #0b0f1c;
+            --deep-bg-end: #19233f;
+            --primary-gold: #f2a900;
+            --primary-gold-hover: #ffbc3c;
+            --teacher-accent: #4c9aff;
+            --student-accent: #6fcf97;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(145deg, var(--deep-bg-start), var(--deep-bg-end));
+            min-height: 100vh;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+            padding: 1.5rem;
+        }
+
+        /* floating orbs for atmosphere */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .orb-1 {
+            bottom: -100px;
+            left: -100px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,215,150,0.1) 0%, transparent 70%);
+        }
+        .orb-2 {
+            top: -80px;
+            right: -80px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(100, 180, 255, 0.08) 0%, transparent 70%);
+        }
+        .orb-3 {
+            bottom: 30%;
+            right: 10%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(242,169,0,0.06) 0%, transparent 80%);
+        }
+
+        /* main login container - no top bar */
+        .main-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-card {
+            max-width: 520px;
+            width: 100%;
+            background: rgba(20, 25, 45, 0.55);
+            backdrop-filter: var(--backdrop-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 56px;
+            padding: 2.8rem 2.2rem;
+            box-shadow: var(--glass-shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s;
+            animation: fadeSlideUp 0.5s ease-out;
+        }
+
+        .login-card:hover {
+            background: rgba(30, 35, 55, 0.6);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.4);
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-badge {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .welcome-badge i {
+            font-size: 3.5rem;
+            color: var(--primary-gold);
+            filter: drop-shadow(0 4px 8px rgba(242,169,0,0.3));
+        }
+
+        .login-card h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #ffffff, #ffecb3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+            margin-bottom: 0.4rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,240,0.7);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px dashed rgba(255,215,100,0.3);
+            padding-bottom: 0.8rem;
+        }
+
+        /* enrollment alert (if user just enrolled) */
+        .enrollment-alert {
+            background: rgba(242, 169, 0, 0.18);
+            border-left: 4px solid var(--primary-gold);
+            border-radius: 24px;
+            padding: 0.9rem 1.2rem;
+            margin-bottom: 1.8rem;
+            font-size: 0.85rem;
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .enrollment-alert i {
+            font-size: 1.4rem;
+            color: var(--primary-gold);
+        }
+
+        .enrollment-alert span {
+            flex: 1;
+            color: #fff3d1;
+        }
+
+        /* form groups */
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: rgba(255,255,240,0.9);
+            letter-spacing: 0.3px;
+        }
+
+        .input-group label i {
+            margin-right: 8px;
+            color: var(--primary-gold);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            background: rgba(10, 14, 23, 0.6);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 48px;
+            font-size: 1rem;
+            color: white;
+            outline: none;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary-gold);
+            background: rgba(20, 25, 45, 0.8);
+            box-shadow: 0 0 0 3px rgba(242,169,0,0.2);
+        }
+
+        .input-field::placeholder {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.9rem;
+        }
+
+        /* password wrapper */
+        .password-wrapper {
+            position: relative;
+        }
+        .toggle-pwd {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: rgba(255,255,200,0.7);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+        .toggle-pwd:hover {
+            color: var(--primary-gold);
+        }
+
+        /* role selection - modern pill design */
+        .role-group {
+            margin-bottom: 1.8rem;
+        }
+        .role-label {
+            display: block;
+            margin-bottom: 0.7rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: rgba(255,255,240,0.9);
+        }
+        .role-label i {
+            margin-right: 8px;
+            color: var(--primary-gold);
+        }
+        .role-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .role-card {
+            flex: 1;
+            background: rgba(10, 14, 23, 0.5);
+            border: 1.5px solid rgba(255,255,255,0.2);
+            border-radius: 48px;
+            padding: 0.9rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
+        }
+        .role-card i {
+            font-size: 1.3rem;
+            transition: transform 0.2s;
+        }
+        .role-card span {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .role-card.student i { color: #6fcf97; }
+        .role-card.teacher i { color: #4c9aff; }
+        .role-card:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,215,100,0.5);
+            transform: translateY(-2px);
+        }
+        .role-card.selected {
+            border-color: var(--primary-gold);
+            background: rgba(242,169,0,0.2);
+            box-shadow: 0 0 12px rgba(242,169,0,0.3);
+        }
+        .role-card.selected.student {
+            border-color: #6fcf97;
+            background: rgba(111,207,151,0.15);
+        }
+        .role-card.selected.teacher {
+            border-color: #4c9aff;
+            background: rgba(76,154,255,0.15);
+        }
+
+        /* options row */
+        .options-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem 0 1.8rem;
+            font-size: 0.85rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .checkbox-label input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-gold);
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            color: rgba(255,215,100,0.8);
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .forgot-link:hover {
+            color: var(--primary-gold);
+            text-decoration: underline;
+        }
+
+        /* SINGLE LOGIN BUTTON - elegant gold button */
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(95deg, #f2a900, #ffc64a);
+            border: none;
+            border-radius: 60px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #0b0f1c;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 8px 18px rgba(242,169,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: inherit;
+        }
+
+        .login-btn:hover {
+            transform: scale(1.02);
+            background: linear-gradient(95deg, #ffbc3c, #ffd97a);
+            box-shadow: 0 12px 24px rgba(242,169,0,0.5);
+        }
+
+        .login-btn:active {
+            transform: scale(0.98);
+        }
+
+        .register-prompt {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: rgba(255,255,240,0.7);
+        }
+
+        .register-prompt a {
+            color: var(--primary-gold);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px dashed rgba(242,169,0,0.5);
+        }
+
+        .register-prompt a:hover {
+            color: #ffdd99;
+            border-bottom-color: var(--primary-gold);
+        }
+
+        .demo-hint {
+            margin-top: 1.5rem;
+            padding: 0.8rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 40px;
+            font-size: 0.75rem;
+            text-align: center;
+            color: rgba(255,255,200,0.6);
+            border: 1px dashed rgba(255,215,100,0.3);
+        }
+
+        .demo-hint i {
+            margin-right: 5px;
+        }
+
+        /* toast messages */
+        .toast-notify {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e243b;
+            backdrop-filter: blur(20px);
+            padding: 12px 28px;
+            border-radius: 50px;
+            color: #ffecb3;
+            border-left: 5px solid #f2a900;
+            z-index: 2000;
+            font-weight: 500;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 24px black;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.25s;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 550px) {
+            .login-card { padding: 2rem 1.5rem; margin: 1rem; }
+            .toast-notify { white-space: normal; width: 90%; text-align: center; font-size: 0.8rem; }
+            .role-options { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="main-container">
+        <div class="login-card">
+            <div class="welcome-badge">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h2>ECOEMY Portal</h2>
+            <div class="subtitle">Sign in with your role</div>
+
+            <!-- dynamic enrollment alert (shows if user just completed enrollment) -->
+            <div id="enrollmentAlert" style="display: none;" class="enrollment-alert">
+                <i class="fas fa-check-circle"></i>
+                <span id="alertMessage">Enrollment successful! Please log in with your role.</span>
+            </div>
+
+            <!-- login form -->
+            <form id="loginForm">
+                <div class="input-group">
+                    <label><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" id="emailInput" class="input-field" placeholder="student@ecoemy.com" autocomplete="email">
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="passwordInput" class="input-field" placeholder="••••••••" autocomplete="current-password">
+                        <button type="button" id="togglePassword" class="toggle-pwd"><i class="far fa-eye-slash"></i></button>
+                    </div>
+                </div>
+
+                <!-- ROLE SELECTION: Teacher or Student (visual selection) -->
+                <div class="role-group">
+                    <div class="role-label"><i class="fas fa-users"></i> Select your role *</div>
+                    <div class="role-options">
+                        <div class="role-card student" data-role="student" id="studentRoleCard">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>Student</span>
+                        </div>
+                        <div class="role-card teacher" data-role="teacher" id="teacherRoleCard">
+                            <i class="fas fa-chalkboard-user"></i>
+                            <span>Teacher</span>
+                        </div>
+                    </div>
+                    <input type="hidden" id="selectedRole" value="">
+                </div>
+
+                <div class="options-row">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="rememberCheck"> <span>Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-link" id="forgotPwdLink"><i class="fas fa-question-circle"></i> Forgot password?</a>
+                </div>
+
+                <!-- SINGLE LOGIN BUTTON - changes page based on selected role -->
+                <button type="submit" id="loginBtn" class="login-btn">
+                    <i class="fas fa-arrow-right-to-bracket"></i> Login
+                </button>
+
+                <div class="register-prompt">
+                    Don't have an account? <a href="#" id="enrollRedirectLink">Enroll now →</a>
+                </div>
+
+                <div class="demo-hint">
+                    <i class="fas fa-info-circle"></i> Select Student or Teacher role, then click Login.<br>
+                    Student → Dashboard.html &nbsp;|&nbsp; Teacher → classesu.html
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toastMsg" class="toast-notify"></div>
+
+    <script>
+        // Toast utility for feedback
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toastMsg');
+            toast.textContent = message;
+            toast.style.opacity = '1';
+            toast.style.borderLeftColor = isError ? '#ff8866' : '#f2a900';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 3000);
+        }
+
+        // Role selection logic (pure UI, stores selected role)
+        let currentRole = ''; // 'student' or 'teacher'
+        const studentCard = document.getElementById('studentRoleCard');
+        const teacherCard = document.getElementById('teacherRoleCard');
+        const selectedRoleInput = document.getElementById('selectedRole');
+
+        function setRole(role) {
+            currentRole = role;
+            selectedRoleInput.value = role;
+            // Update UI highlighting
+            if (role === 'student') {
+                studentCard.classList.add('selected');
+                teacherCard.classList.remove('selected');
+            } else if (role === 'teacher') {
+                teacherCard.classList.add('selected');
+                studentCard.classList.remove('selected');
+            } else {
+                studentCard.classList.remove('selected');
+                teacherCard.classList.remove('selected');
+            }
+        }
+
+        studentCard.addEventListener('click', () => setRole('student'));
+        teacherCard.addEventListener('click', () => setRole('teacher'));
+
+        // Toggle password visibility
+        const toggleBtn = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('passwordInput');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+                toggleBtn.innerHTML = type === 'password' ? '<i class="far fa-eye-slash"></i>' : '<i class="far fa-eye"></i>';
+            });
+        }
+
+        // Load enrollment data from localStorage (if user just enrolled)
+        function loadEnrollmentData() {
+            const enrollmentRaw = localStorage.getItem('ecoemy_enrollment');
+            const enrollmentCompleteFlag = sessionStorage.getItem('enrollment_complete');
+            if (enrollmentRaw) {
+                try {
+                    const enrollment = JSON.parse(enrollmentRaw);
+                    const emailField = document.getElementById('emailInput');
+                    if (enrollment.email && emailField && !emailField.value) {
+                        emailField.value = enrollment.email;
+                    }
+                    if (enrollmentCompleteFlag === 'true') {
+                        const alertDiv = document.getElementById('enrollmentAlert');
+                        const alertMsgSpan = document.getElementById('alertMessage');
+                        if (alertDiv && alertMsgSpan) {
+                            alertMsgSpan.innerHTML = `<strong>✨ Welcome, ${enrollment.fullName || 'Student'}!</strong> Your enrollment is complete. Select your role and log in.`;
+                            alertDiv.style.display = 'flex';
+                        }
+                        sessionStorage.removeItem('enrollment_complete');
+                        setTimeout(() => {
+                            if (alertDiv) alertDiv.style.opacity = '0.9';
+                        }, 100);
+                    }
+                } catch(e) { console.warn(e); }
+            }
+            const urlParams = new URLSearchParams(window.location.search);
+            const emailParam = urlParams.get('email');
+            if (emailParam && document.getElementById('emailInput') && !document.getElementById('emailInput').value) {
+                document.getElementById('emailInput').value = emailParam;
+            }
+        }
+
+        // Validation function (checks email, password, and role selection)
+        function validateCredentials() {
+            const email = document.getElementById('emailInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+            
+            if (!email) {
+                showToast("❌ Please enter your email address", true);
+                return false;
+            }
+            if (!email.includes('@') || !email.includes('.')) {
+                showToast("❌ Please enter a valid email address", true);
+                return false;
+            }
+            if (!password) {
+                showToast("❌ Please enter your password", true);
+                return false;
+            }
+            if (!currentRole) {
+                showToast("❌ Please select your role (Student or Teacher)", true);
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Store session data after successful validation
+        function storeSessionData() {
+            const email = document.getElementById('emailInput').value.trim();
+            const userData = {
+                email: email,
+                role: currentRole,
+                loggedInAt: new Date().toISOString(),
+                name: localStorage.getItem('ecoemy_enrollment') ? 
+                      (JSON.parse(localStorage.getItem('ecoemy_enrollment')).fullName || (currentRole === 'student' ? 'Student' : 'Teacher')) : 
+                      (currentRole === 'student' ? 'ECOEMY Student' : 'ECOEMY Teacher')
+            };
+            sessionStorage.setItem('ecoemy_auth', JSON.stringify(userData));
+            
+            // Remember me functionality
+            const rememberCheck = document.getElementById('rememberCheck');
+            if (rememberCheck && rememberCheck.checked) {
+                localStorage.setItem('ecoemy_remember_email', email);
+            } else if (rememberCheck) {
+                localStorage.removeItem('ecoemy_remember_email');
+            }
+        }
+
+        // DIRECT NAVIGATION USING <a> TAG - based on selected role
+        function performLoginAndRedirect() {
+            if (!validateCredentials()) {
+                return;
+            }
+            
+            storeSessionData();
+            
+            // Determine target URL based on role
+            let targetUrl = '';
+            let roleDisplay = '';
+            
+            if (currentRole === 'student') {
+                targetUrl = 'Dashboard.html';
+                roleDisplay = 'Student Dashboard';
+            } else if (currentRole === 'teacher') {
+                targetUrl = 'classesu.html';
+                roleDisplay = 'Teacher Classes';
+            }
+            
+            if (targetUrl) {
+                showToast(`✅ Logging in as ${currentRole === 'student' ? 'Student' : 'Teacher'}... Redirecting to ${roleDisplay}`, false);
+                
+                // Use <a> tag navigation (pure HTML navigation)
+                setTimeout(() => {
+                    const loginAnchor = document.createElement('a');
+                    loginAnchor.href = targetUrl;
+                    loginAnchor.style.display = 'none';
+                    document.body.appendChild(loginAnchor);
+                    loginAnchor.click();
+                    document.body.removeChild(loginAnchor);
+                }, 500);
+            }
+        }
+
+        // Handle form submission (single login button)
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            performLoginAndRedirect();
+        });
+        
+        // Also attach click handler to button directly (in case of any issues)
+        loginBtn.addEventListener('click', function(event) {
+            // Prevent double submission if form already handles
+            event.preventDefault();
+            performLoginAndRedirect();
+        });
+        
+        // Forgot password demo
+        const forgotLink = document.getElementById('forgotPwdLink');
+        if (forgotLink) {
+            forgotLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showToast("📧 Demo mode: Password reset link would be sent to your registered email.", false);
+            });
+        }
+        
+        // Enroll redirect (to enrollment page - using <a> tag)
+        const enrollRedirect = document.getElementById('enrollRedirectLink');
+        if (enrollRedirect) {
+            enrollRedirect.addEventListener('click', (e) => {
+                e.preventDefault();
+                showToast("📋 Opening enrollment wizard...", false);
+                setTimeout(() => {
+                    const enrollAnchor = document.createElement('a');
+                    enrollAnchor.href = 'enroll.html';
+                    enrollAnchor.style.display = 'none';
+                    document.body.appendChild(enrollAnchor);
+                    enrollAnchor.click();
+                    document.body.removeChild(enrollAnchor);
+                }, 200);
+            });
+        }
+        
+        // Load remembered email
+        if (localStorage.getItem('ecoemy_remember_email')) {
+            const savedEmail = localStorage.getItem('ecoemy_remember_email');
+            if (savedEmail && document.getElementById('emailInput')) {
+                document.getElementById('emailInput').value = savedEmail;
+                const rememberCheck = document.getElementById('rememberCheck');
+                if (rememberCheck) rememberCheck.checked = true;
+            }
+        }
+        
+        // Load enrollment data on page ready
+        loadEnrollmentData();
+        
+        // Restore role from session if available
+        const savedAuth = sessionStorage.getItem('ecoemy_auth');
+        if (savedAuth && !currentRole) {
+            try {
+                const auth = JSON.parse(savedAuth);
+                if (auth.role === 'student' || auth.role === 'teacher') {
+                    setRole(auth.role);
+                }
+            } catch(e) {}
+        }
+        
+        console.log("Login page ready — Single Login button redirects based on selected role: Student → Dashboard.html, Teacher → classesu.html");
+    </script>
+</body>
+</html>

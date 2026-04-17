@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ECOEMY · My Saved Books (Student Library)</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* LIQUID GLASS VARIABLES */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.18);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
+            --backdrop-blur: blur(12px) saturate(180%);
+            --text-light: #f2f2f2;
+            --deep-bg-start: #0b0f1c;
+            --deep-bg-end: #19233f;
+            --gold-accent: #ffd966;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(145deg, var(--deep-bg-start), var(--deep-bg-end));
+            min-height: 100vh;
+            color: var(--text-light);
+            backdrop-filter: blur(2px);
+            margin: 0;
+            line-height: 1.5;
+            padding-bottom: 3rem;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        /* === GLASS NAVIGATION === */
+        nav {
+            position: sticky;
+            top: 1.2rem;
+            z-index: 1000;
+            max-width: 1400px;
+            margin: 0 auto 1rem auto;
+            width: 95%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 2rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 60px;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .logo h2 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            background: linear-gradient(130deg, #ffffff, #ffe6b0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo span { font-weight: 300; }
+
+        .nav-links {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.3);
+        }
+        .btn-special {
+            background: rgba(242, 169, 0, 0.75) !important;
+            border: 1px solid rgba(255, 215, 100, 0.9) !important;
+            color: #0a0a14 !important;
+            font-weight: 700 !important;
+        }
+
+        /* MAIN CONTAINER */
+        .saved-books-container {
+            max-width: 1400px;
+            width: 95%;
+            margin: 1.5rem auto;
+        }
+
+        /* Header Section */
+        .page-header {
+            background: var(--glass-bg);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 48px;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .header-text h1 {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-text h1 i {
+            color: var(--gold-accent);
+        }
+        .header-text p {
+            color: rgba(255,255,240,0.8);
+            margin-top: 0.3rem;
+        }
+        .stats-badge {
+            background: rgba(0,0,0,0.35);
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .stats-badge span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold-accent);
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            padding: 0.8rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .filter-group {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: rgba(242, 169, 0, 0.7);
+            border-color: var(--gold-accent);
+            color: #0a0a14;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: rgba(0,0,0,0.3);
+            border-radius: 60px;
+            padding: 0.3rem 1rem;
+        }
+        .search-box input {
+            background: transparent;
+            border: none;
+            padding: 0.5rem;
+            color: white;
+            outline: none;
+            width: 200px;
+        }
+        .search-box i {
+            color: var(--gold-accent);
+        }
+
+        /* Books Grid */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.8rem;
+        }
+        .book-card {
+            background: rgba(25, 30, 50, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            border: 1px solid rgba(255,215,100,0.3);
+            padding: 1.4rem;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+        .book-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-accent);
+            background: rgba(45, 50, 75, 0.7);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.4);
+        }
+        .book-cover {
+            font-size: 2.5rem;
+            color: var(--gold-accent);
+            margin-bottom: 0.8rem;
+        }
+        .book-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+        .book-author {
+            font-size: 0.8rem;
+            color: rgba(255,255,240,0.7);
+            margin-bottom: 0.5rem;
+        }
+        .book-meta {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.8rem 0;
+            font-size: 0.8rem;
+        }
+        .book-category {
+            background: rgba(255,215,100,0.2);
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+        }
+        .book-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            gap: 0.8rem;
+        }
+        .btn-read {
+            background: rgba(242, 169, 0, 0.8);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            flex: 1;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        .btn-read:hover {
+            background: #f3cf8a;
+            transform: scale(1.02);
+        }
+        .btn-remove {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #ffa27a;
+        }
+        .btn-remove:hover {
+            background: rgba(255,80,80,0.3);
+            border-color: #ff8866;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 48px;
+        }
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--gold-accent);
+            margin-bottom: 1rem;
+            opacity: 0.6;
+        }
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+        }
+        .empty-state p {
+            color: rgba(255,255,240,0.7);
+        }
+        .browse-btn {
+            display: inline-block;
+            margin-top: 1.5rem;
+            background: rgba(242, 169, 0, 0.8);
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            text-decoration: none;
+            color: #0a0a14;
+            font-weight: 600;
+        }
+
+        /* Floating Orbs */
+        #orb-bottom, #orb-top {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        #orb-bottom { bottom: 20px; left: 20px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,215,150,0.12) 0%, transparent 80%);}
+        #orb-top { top: 100px; right: 20px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(150,200,255,0.1) 0%, transparent 80%);}
+
+        footer {
+            max-width: 1400px;
+            width: 95%;
+            margin: 2rem auto 0;
+            padding: 1.5rem;
+            background: rgba(20,25,45,0.45);
+            backdrop-filter: blur(14px);
+            border-radius: 60px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .page-header { flex-direction: column; text-align: center; gap: 1rem; }
+            .filter-bar { flex-direction: column; align-items: stretch; }
+            .search-box input { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="orb1"></div>
+    <div id="orb2"></div>
+
+    <nav>
+        <div class="logo"><h2>ECO<span>EMY</span></h2></div>
+        <div class="nav-links">
+            <a href="STu.exam.html"><i class="fas fa-file-alt"></i> My Exams</a>
+            <a href="Rosouresstoey.html"><i class="fas fa-book"></i> Resources Shop</a>
+            <a href="Rosoures.html"><i class="fas fa-book-open"></i> Resources</a>
+            <a href="classes.html"><i class="fas fa-chalkboard-teacher"></i> Classes</a>
+            <a href="Dashboard.html"><i class="fas fa-user-graduate"></i> Profile</a>
+        </div>
+    </nav>
+
+    <main class="saved-books-container">
+        <div class="page-header">
+            <div class="header-text">
+                <h1><i class="fas fa-bookmark"></i> My Saved Books</h1>
+                <p>Your personal collection — books, notes, and resources you've bookmarked</p>
+            </div>
+            <div class="stats-badge">
+                <i class="fas fa-books"></i>
+                <span id="savedCount">0</span>
+                <span>saved items</span>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <div class="filter-group">
+                <button class="filter-btn active" data-filter="all">All Books</button>
+                <button class="filter-btn" data-filter="textbook">Textbooks</button>
+                <button class="filter-btn" data-filter="revision">Revision Notes</button>
+                <button class="filter-btn" data-filter="pastpaper">Past Papers</button>
+            </div>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search saved books...">
+            </div>
+        </div>
+
+        <div id="booksGridContainer" class="books-grid"></div>
+        <div id="emptyStateContainer"></div>
+    </main>
+
+    <footer>
+        <p>© 2026 ECOEMY Student Library — Your saved books are always available offline.</p>
+    </footer>
+
+    <script>
+        // ---------- SAVED BOOKS DATA (simulated student's saved collection) ----------
+        let savedBooks = [
+            {
+                id: 1,
+                title: "Economics in a Nutshell",
+                author: "Dr. Sarah Chen",
+                category: "textbook",
+                coverIcon: "fa-chart-line",
+                savedDate: "2026-03-15",
+                description: "Complete A-Level Economics guide with case studies"
+            },
+            {
+                id: 2,
+                title: "IGCSE Mathematics Revision Notes",
+                author: "Ms. Emily Park",
+                category: "revision",
+                coverIcon: "fa-calculator",
+                savedDate: "2026-03-20",
+                description: "Concise notes for quick revision"
+            },
+            {
+                id: 3,
+                title: "Business Management Past Papers 2024",
+                author: "ECOEMY Exam Board",
+                category: "pastpaper",
+                coverIcon: "fa-file-alt",
+                savedDate: "2026-03-10",
+                description: "May/June 2024 session with marking scheme"
+            },
+            {
+                id: 4,
+                title: "Advanced Macroeconomics",
+                author: "Prof. James Wright",
+                category: "textbook",
+                coverIcon: "fa-globe",
+                savedDate: "2026-03-05",
+                description: "University-level macroeconomics"
+            },
+            {
+                id: 5,
+                title: "English Literature Poetry Analysis",
+                author: "Dr. Robert Frost",
+                category: "revision",
+                coverIcon: "fa-feather-alt",
+                savedDate: "2026-03-25",
+                description: "Key poems and analysis techniques"
+            },
+            {
+                id: 6,
+                title: "Accounting Principles Workbook",
+                author: "Maria Gonzalez",
+                category: "textbook",
+                coverIcon: "fa-calculator",
+                savedDate: "2026-02-28",
+                description: "Practice exercises with solutions"
+            },
+            {
+                id: 7,
+                title: "Economics 0455 Past Papers",
+                author: "CIE Exam Board",
+                category: "pastpaper",
+                coverIcon: "fa-file-pdf",
+                savedDate: "2026-03-18",
+                description: "2019-2023 past papers compilation"
+            },
+            {
+                id: 8,
+                title: "Corporate Governance Essentials",
+                author: "Dr. Alan Smith",
+                category: "revision",
+                coverIcon: "fa-building",
+                savedDate: "2026-03-22",
+                description: "Key concepts and frameworks"
+            }
+        ];
+
+        let currentFilter = "all";
+        let searchQuery = "";
+
+        // Helper: escape HTML
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        // Get category icon
+        function getCategoryIcon(category) {
+            switch(category) {
+                case 'textbook': return 'fa-book';
+                case 'revision': return 'fa-sticky-note';
+                case 'pastpaper': return 'fa-file-pdf';
+                default: return 'fa-bookmark';
+            }
+        }
+
+        // Get category display name
+        function getCategoryName(category) {
+            switch(category) {
+                case 'textbook': return 'Textbook';
+                case 'revision': return 'Revision Notes';
+                case 'pastpaper': return 'Past Paper';
+                default: return 'Book';
+            }
+        }
+
+        // Filter books based on current filter and search
+        function getFilteredBooks() {
+            let filtered = [...savedBooks];
+            
+            // Apply category filter
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(book => book.category === currentFilter);
+            }
+            
+            // Apply search filter
+            if (searchQuery.trim() !== '') {
+                const query = searchQuery.toLowerCase();
+                filtered = filtered.filter(book => 
+                    book.title.toLowerCase().includes(query) || 
+                    book.author.toLowerCase().includes(query) ||
+                    book.description.toLowerCase().includes(query)
+                );
+            }
+            
+            return filtered;
+        }
+
+        // Remove a book from saved collection
+        function removeBook(bookId) {
+            savedBooks = savedBooks.filter(book => book.id !== bookId);
+            renderBooksGrid();
+            updateStats();
+            showToast("Book removed from your collection", "info");
+        }
+
+        // Read book (simulate opening)
+        function readBook(book) {
+            alert(`📖 Opening "${book.title}"\n\nYou can now read this ${getCategoryName(book.category)}.\n(Full reading feature coming soon!)`);
+        }
+
+        // Render books grid
+        function renderBooksGrid() {
+            const container = document.getElementById('booksGridContainer');
+            const emptyContainer = document.getElementById('emptyStateContainer');
+            const filteredBooks = getFilteredBooks();
+            
+            if (filteredBooks.length === 0) {
+                container.innerHTML = '';
+                emptyContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-book-open"></i>
+                        <h3>No saved books found</h3>
+                        <p>${searchQuery ? "Try a different search term" : "Your saved library is empty. Start exploring the ECOEMY library!"}</p>
+                        <a href="#" class="browse-btn" id="browseLibraryBtn"><i class="fas fa-search"></i> Browse Library</a>
+                    </div>
+                `;
+                const browseBtn = document.getElementById('browseLibraryBtn');
+                if (browseBtn) {
+                    browseBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        alert("📚 Redirecting to ECOEMY Library — Discover thousands of books and resources.");
+                    });
+                }
+                return;
+            }
+            
+            emptyContainer.innerHTML = '';
+            container.innerHTML = '';
+            
+            filteredBooks.forEach(book => {
+                const card = document.createElement('div');
+                card.className = 'book-card';
+                card.innerHTML = `
+                    <div class="book-cover">
+                        <i class="fas ${book.coverIcon}"></i>
+                        <i class="fas ${getCategoryIcon(book.category)}" style="margin-left: 8px; font-size: 1rem; opacity: 0.7;"></i>
+                    </div>
+                    <div class="book-title">${escapeHtml(book.title)}</div>
+                    <div class="book-author">${escapeHtml(book.author)}</div>
+                    <div class="book-meta">
+                        <span class="book-category">${getCategoryName(book.category)}</span>
+                        <span><i class="far fa-calendar-alt"></i> ${formatDate(book.savedDate)}</span>
+                    </div>
+                    <div class="book-actions">
+                        <button class="btn-read" data-id="${book.id}"><i class="fas fa-eye"></i> Read</button>
+                        <button class="btn-remove" data-id="${book.id}"><i class="fas fa-trash-alt"></i> Remove</button>
+                    </div>
+                `;
+                
+                const readBtn = card.querySelector('.btn-read');
+                const removeBtn = card.querySelector('.btn-remove');
+                
+                readBtn.addEventListener('click', () => readBook(book));
+                removeBtn.addEventListener('click', () => removeBook(book.id));
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Update stats counter
+        function updateStats() {
+            const countSpan = document.getElementById('savedCount');
+            if (countSpan) {
+                countSpan.innerText = savedBooks.length;
+            }
+        }
+
+        // Toast notification
+        function showToast(message, type = "info") {
+            // Create a simple floating notification
+            const toast = document.createElement('div');
+            toast.style.position = 'fixed';
+            toast.style.bottom = '30px';
+            toast.style.right = '30px';
+            toast.style.background = 'rgba(0,0,0,0.85)';
+            toast.style.backdropFilter = 'blur(12px)';
+            toast.style.border = '1px solid var(--gold-accent)';
+            toast.style.borderRadius = '60px';
+            toast.style.padding = '0.8rem 1.5rem';
+            toast.style.color = '#fff';
+            toast.style.zIndex = '3000';
+            toast.style.fontSize = '0.9rem';
+            toast.style.display = 'flex';
+            toast.style.alignItems = 'center';
+            toast.style.gap = '10px';
+            toast.innerHTML = `<i class="fas ${type === 'info' ? 'fa-info-circle' : 'fa-check-circle'}" style="color: var(--gold-accent);"></i> ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        // Initialize filter buttons
+        function initFilters() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.getAttribute('data-filter');
+                    renderBooksGrid();
+                });
+            });
+            
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                renderBooksGrid();
+            });
+        }
+
+        // Simulate adding a new saved book (for demo - can be triggered)
+        function demoAddBook() {
+            const newBook = {
+                id: Date.now(),
+                title: "New Resource: Microeconomics Basics",
+                author: "ECOEMY Academic Team",
+                category: "revision",
+                coverIcon: "fa-chart-simple",
+                savedDate: new Date().toISOString().split('T')[0],
+                description: "Essential microeconomics concepts"
+            };
+            savedBooks.unshift(newBook);
+            renderBooksGrid();
+            updateStats();
+            showToast("New book added to your collection!", "success");
+        }
+
+        // Add a floating action button for demo (optional)
+        function addDemoButton() {
+            const fab = document.createElement('button');
+            fab.innerHTML = '<i class="fas fa-plus"></i>';
+            fab.style.position = 'fixed';
+            fab.style.bottom = '30px';
+            fab.style.right = '30px';
+            fab.style.width = '56px';
+            fab.style.height = '56px';
+            fab.style.borderRadius = '50%';
+            fab.style.background = 'rgba(242, 169, 0, 0.9)';
+            fab.style.border = 'none';
+            fab.style.color = '#0a0a14';
+            fab.style.fontSize = '1.5rem';
+            fab.style.cursor = 'pointer';
+            fab.style.zIndex = '1000';
+            fab.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
+            fab.style.transition = '0.2s';
+            fab.title = "Add demo book";
+            fab.addEventListener('click', demoAddBook);
+            fab.addEventListener('mouseenter', () => fab.style.transform = 'scale(1.1)');
+            fab.addEventListener('mouseleave', () => fab.style.transform = 'scale(1)');
+            document.body.appendChild(fab);
+        }
+
+        // Initialize page
+        function init() {
+            renderBooksGrid();
+            updateStats();
+            initFilters();
+            // Optional: add demo FAB for adding books (comment if not needed)
+            addDemoButton();
+        }
+
+        // Run initialization
+        init();
+    </script>
+</body>
+</html>
+```
